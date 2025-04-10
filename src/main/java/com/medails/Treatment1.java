@@ -155,24 +155,24 @@ public class Treatment1
             /************************* Report *************************/
 
             // Report -> TTC
-            String reportTTC = String.format("%.1f", currentTTC);
+            String reportTTC = String.format(Locale.US, "%.2f", currentTTC);
             dp.txtTTC.setText(reportTTC);
 
             // Report -> HT
-            String reportHT = String.format("%.1f", currentHT);
+            String reportHT = String.format(Locale.US ,"%.2f", currentHT);
             dp.txtHT.setText(reportHT);           
 
             // Report -> TVA
-            String reportTVA = String.format("%.1f", currentTVA);
+            String reportTVA = String.format(Locale.US ,"%.2f", currentTVA);
             dp.txtTVA.setText(reportTVA);
 
             // Report -> URSSAF
-            String reportTaxe = String.format("%.1f", currentTaxe);
+            String reportTaxe = String.format(Locale.US, "%.2f", currentTaxe);
             dp.txtTaxe.setText(reportTaxe);
 
             // Report -> Bénéfice
             currentBenefit = currentHT - currentTaxe;
-            String reportBenefit = String.format("%.1f", currentBenefit);
+            String reportBenefit = String.format(Locale.US, "%.2f", currentBenefit);
             dp.txtBenefit.setText(reportBenefit);
         }
         catch (NumberFormatException ex)
@@ -272,7 +272,7 @@ public class Treatment1
             public void popupMenuCanceled(PopupMenuEvent e) {}
         });
     }
-
+    
 
     public void updateComboBox (JComboBox<String> comboBox, List<String> allItems)
     {
@@ -290,63 +290,84 @@ public class Treatment1
     public void saveDataListener()
     {
         // Vérification cellules non-vide
-        if ((dp.boxRep1.getSelectedItem()) == null || (dp.boxPDF1.getSelectedItem() == null) ||
-            (dp.boxRep2.getSelectedItem()) == null || (dp.boxPDF2.getSelectedItem() == null || dp.datePay.getDate() == null))
+        if (dp.txtDays.getText().isEmpty() || dp.txtTJM.getText().isEmpty() || 
+        	    dp.txtTTC.getText().isEmpty() || dp.txtHT.getText().isEmpty() ||
+        	    	dp.txtTVA.getText().isEmpty() || dp.txtTaxe.getText().isEmpty() ||
+        	    		dp.txtBenefit.getText().isEmpty())
         {
-            JOptionPane.showMessageDialog(dp.fen, "Veuillez compléter tous les champs avant de continuer",
-                                                    "Champs vides", 
-                                                    JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(dp.fen, "Tous les champs doivent être renseignés",
+                                                    "Champs manquants", 
+                                                    JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        Date getPay = dp.datePay.getDate();
-        SimpleDateFormat sdfYear  = new SimpleDateFormat("yyyy", Locale.FRENCH);
-        SimpleDateFormat sdfMonth = new SimpleDateFormat("MMMM", Locale.FRENCH);
-        SimpleDateFormat sdfDay   = new SimpleDateFormat("dd"  , Locale.FRENCH);
-
-        // Récupération des valeurs depuis l'infercace utilisateur
-        Map<String, Object> factureData   = new HashMap<>();
-        Map<String, Object> directoryData = new HashMap<>();
-        Map<String, Object> namePDFData   = new HashMap<>();
-
-        /* A1 */  factureData.  put("FactureAnne",         Integer.parseInt       ((String) dp.boxYears.getSelectedItem()));
-        /* A2 */  factureData.  put("FactureMois",                                (String) dp.boxMonths.getSelectedItem());
-        /* A3 */  factureData.  put("VersementAnne",       Integer.parseInt       ((sdfYear.format(getPay))));
-        /* A3 */  factureData.  put("VersementMois",       sdfMonth.format        (getPay));
-        /* A3 */  factureData.  put("VersementJour",       Integer.parseInt       (sdfDay.format(getPay)));
-        /* B1 */  factureData.  put("Jours",               Integer.parseInt       (dp.txtDays.getText()));
-        /* B2 */  factureData.  put("TJM",                 Double.parseDouble     (dp.txtTJM.getText()));
-        /* C1 */  factureData.  put("TTC",                 Double.parseDouble     (dp.txtTTC.getText()));
-        /* C2 */  factureData.  put("HT",                  Double.parseDouble     (dp.txtHT.getText()));
-        /* C3 */  factureData.  put("TVA",                 Double.parseDouble     (dp.txtTVA.getText()));
-        /* D1 */  factureData.  put("Taxes",               Double.parseDouble     (dp.txtTaxe.getText()));
-        /* D2 */  factureData.  put("Benefices",           Double.parseDouble     (dp.txtBenefit.getText()));
-        /* F1 */  directoryData.put("RepFacture",                                 (String) dp.boxRep1.getSelectedItem()); 
-        /* E1 */  directoryData.put("RepDecla",                                   (String) dp.boxPDF1.getSelectedItem()); 
-        /* I1 */  namePDFData.  put("NameFacture",                                (String) dp.boxRep2.getSelectedItem());
-        /* J1 */  namePDFData.  put("NameDecla",                                  (String) dp.boxPDF2.getSelectedItem());
-
-        // Vérification de l'existence du fichier 
-        List<Map<String, Object>> existingPDFData = db.getPDF();
-
-        boolean exists = existingPDFData.stream().anyMatch(f -> f.get("NameFacture").equals(namePDFData.get("NameFacture")) &&
-                                                                f.get("NameDecla").equals(namePDFData.get("NameDecla")));
-
-        if (exists)
+        try
         {
-            JOptionPane.showMessageDialog(dp.fen, "Une facture pour ce mois existe déjà",
-                                                  "Doublon",
-                                                  JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
+	        Date getPay = dp.datePay.getDate();
+	        SimpleDateFormat sdfYear  = new SimpleDateFormat("yyyy", Locale.FRENCH);
+	        SimpleDateFormat sdfMonth = new SimpleDateFormat("MMMM", Locale.FRENCH);
+	        SimpleDateFormat sdfDay   = new SimpleDateFormat("dd"  , Locale.FRENCH);
+	
+	        // Récupération des valeurs depuis l'infercace utilisateur
+	        Map<String, Object> factureData   = new HashMap<>();
+	        Map<String, Object> namePDFData   = new HashMap<>();
+	
+	        /* A1 */  factureData.  put("FactureAnnee",        Integer.parseInt       ((String) dp.boxYears.getSelectedItem()));
+	        /* A2 */  factureData.  put("FactureMois",                                (String) dp.boxMonths.getSelectedItem());
+	        /* A3 */  factureData.  put("VersementAnnee",      Integer.parseInt       ((sdfYear.format(getPay))));
+	        /* A3 */  factureData.  put("VersementMois",       sdfMonth.format        (getPay));
+	        /* A3 */  factureData.  put("VersementJour",       Integer.parseInt       (sdfDay.format(getPay)));
+	        /* B1 */  factureData.  put("Jours",               Integer.parseInt       (dp.txtDays.getText()));
+	        /* B2 */  factureData.  put("TJM",                 Double.parseDouble     (dp.txtTJM.getText()));
+	        /* C1 */  factureData.  put("TTC",                 Double.parseDouble     (dp.txtTTC.getText()));
+	        /* C2 */  factureData.  put("HT",                  Double.parseDouble     (dp.txtHT.getText()));
+	        /* C3 */  factureData.  put("TVA",                 Double.parseDouble     (dp.txtTVA.getText()));
+	        /* D1 */  factureData.  put("Taxes",               Double.parseDouble     (dp.txtTaxe.getText()));
+	        /* D2 */  factureData.  put("Benefices",           Double.parseDouble     (dp.txtBenefit.getText()));
+	        /* I1 */  namePDFData.  put("NameFacture",                                (String) dp.boxPDF1.getSelectedItem());
+	        /* J1 */  namePDFData.  put("NameDecla",                                  (String) dp.boxPDF2.getSelectedItem());
+	
+	        // Vérification de l'existence du fichier 
+	        List<Map<String, Object>> existingPDFData = db.getPDF();
+	     	        
+	        boolean exists = existingPDFData.stream().anyMatch(f -> 
+	        	    {
+	        	        Object nameFacture  = f.get("NameFacture");
+	        	        Object nameDecla    = f.get("NameDecla");
+	        	        String newNameFacture = (String) namePDFData.get("NameFacture");
+	        	        String newNameDecla   = (String) namePDFData.get("NameDecla");
 
-        // Insertion dans la base de données
-        db.setFactureData(factureData);
-        db.setDirectoryData(directoryData);
-        db.setNamePDFData(namePDFData);
-        JOptionPane.showMessageDialog(dp.fen, "Facture enregistrée avec succès",
-                                              "Enregistement réussi !",
-                                              JOptionPane.INFORMATION_MESSAGE);
+	        	        return nameFacture != null && nameDecla != null &&
+	        	        	   nameFacture.equals(newNameFacture) && nameDecla.equals(newNameDecla);
+	        	    });
+	
+	        if (exists)
+	        {
+	            JOptionPane.showMessageDialog(dp.fen, "Une facture pour ce mois existe déjà",
+	                                                  "Doublon",
+	                                                  JOptionPane.WARNING_MESSAGE);
+	            return;
+	        }
+	
+	        // Insertion dans la base de données
+	        db.setFactureData(factureData);
+	        db.setNamePDFData(namePDFData);
+	        JOptionPane.showMessageDialog(dp.fen, "Facture enregistrée avec succès",
+	                                              "Enregistement réussi !",
+	                                              JOptionPane.INFORMATION_MESSAGE);
+        }
+        catch (NumberFormatException e)
+        {
+            JOptionPane.showMessageDialog(dp.fen, "Erreur de format numérique : " + e.getMessage(),
+            									  "Erreur",
+            									  JOptionPane.ERROR_MESSAGE);       	
+        }
+        catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(dp.fen, "Erreur lors de l'enregistrement : " + e.getMessage(),
+					  							  "Erreur",
+					  							  JOptionPane.ERROR_MESSAGE);      	
+        }
     }
 
 

@@ -242,9 +242,18 @@ public class Treatment3
                 double TTC = Double.parseDouble(dp.txtTTCPan3.getText()); 
                 double HT  = TTC / 1.2;
                 double TVA = TTC - HT;
+                                
+                // Report -> TTC
+                String repportTTC = String.format(Locale.US, "%.2f", TTC);
+                dp.txtTTCPan3.setText(repportTTC);
 
-                dp.txtHTPan3.setText(String.valueOf(HT));
-                dp.txtTVAPan3.setText(String.valueOf(TVA));
+                // Report -> HT
+                String repportHT = String.format(Locale.US, "%.2f",  HT);
+                dp.txtHTPan3.setText(repportHT);
+                
+                // Report -> TVA
+                String repportTVA = String.format(Locale.US, "%.2f", TVA);
+                dp.txtTVAPan3.setText(repportTVA);
             }
             catch (NumberFormatException e)
             {
@@ -267,56 +276,73 @@ public class Treatment3
     public void saveDataListener()
     {
         // Vérification cellule non-vide : Déduction
-        if (dp.dateDeduction.getDate() == null ||
-            dp.txtTTCPan3.getText().isEmpty() || dp.txtHTPan3.getText().isEmpty()  || dp.txtTVAPan3.getText().isEmpty()  || 
-            dp.boxRepDeduction.getSelectedItem() == null || dp.boxPDFDeduction.getSelectedItem() == null)
+        if (dp.dateDeduction.getDate() == null || dp.txtTTCPan3.getText().isEmpty() || 
+        		dp.txtHTPan3.getText().isEmpty()  || dp.txtTVAPan3.getText().isEmpty()  || 
+        			dp.boxRepDeduction.getSelectedItem() == null || dp.boxPDFDeduction.getSelectedItem() == null)
         {
-            JOptionPane.showMessageDialog(null, "Veuillez compléter tous les champs avant de continuer",
-                                                                "Champs vides", 
-                                                                JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Tous les champs doivent être renseignés",
+                                                "Champs vides", 
+                                                JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        Date getPay = dp.dateDeduction.getDate();
-        SimpleDateFormat sdfYear  = new SimpleDateFormat("yyyy", Locale.FRENCH);
-        SimpleDateFormat sdfMonth = new SimpleDateFormat("MMMM", Locale.FRENCH);
-        SimpleDateFormat sdfDay   = new SimpleDateFormat("dd"  , Locale.FRENCH);
-
-        // Récupération des valeurs depuis l'infercace utilisateur
-        Map<String, Object> deductionData   = new HashMap<>();
-        Map<String, Object> directoryData = new HashMap<>();
-        Map<String, Object> namePDFData   = new HashMap<>();
-
-        /* A1 */ deductionData.put("DeductionAnnee",     Integer.parseInt    (sdfYear.format((getPay))));
-        /* A1 */ deductionData.put("DeductionMois",      sdfMonth.format     (getPay));
-        /* A1 */ deductionData.put("DeductionJour",      Integer.parseInt    (sdfDay.format(getPay)));
-        /* A2 */ deductionData.put("Annee",              Integer.parseInt    ((String) dp.boxYearsDeduction.getSelectedItem()));
-        /* B1 */ deductionData.put("TTC",                Double.parseDouble  (dp.txtTTCPan3.getText()));
-        /* B2 */ deductionData.put("HT",                 Double.parseDouble  (dp.txtHTPan3.getText()));
-        /* B3 */ deductionData.put("TVA",                Double.parseDouble  (dp.txtTVAPan3.getText()));
-        /* D1 */ directoryData.put("RepDeduction",                           (String) dp.boxRepDeduction.getSelectedItem());
-        /* E1 */ namePDFData.  put("NameDeduction",                          (String) dp.boxPDFDeduction.getSelectedItem());
-
-        // Vérification si la ligne existe déjà
-        List<Map<String, Object>> existingPDFData = db.getPDF();
-
-        boolean exists = existingPDFData.stream().anyMatch(f -> f.get("NameDeduction").equals(namePDFData.get("NameDeduction")));
-         
-        if (exists)
+        try
         {
-            JOptionPane.showMessageDialog(dp.fen, "Une facture pour ce mois existe déjà",
-                                                  "Doublon",
-                                                  JOptionPane.INFORMATION_MESSAGE);
-            return;
+	        Date getPay = dp.dateDeduction.getDate();
+	        SimpleDateFormat sdfYear  = new SimpleDateFormat("yyyy", Locale.FRENCH);
+	        SimpleDateFormat sdfMonth = new SimpleDateFormat("MMMM", Locale.FRENCH);
+	        SimpleDateFormat sdfDay   = new SimpleDateFormat("dd"  , Locale.FRENCH);
+	
+	        // Récupération des valeurs depuis l'infercace utilisateur
+	        Map<String, Object> deductionData = new HashMap<>();
+	        Map<String, Object> namePDFData   = new HashMap<>();
+	
+	        /* A1 */ deductionData.put("DeductionAnnee",     Integer.parseInt    (sdfYear.format((getPay))));
+	        /* A1 */ deductionData.put("DeductionMois",      sdfMonth.format     (getPay));
+	        /* A1 */ deductionData.put("DeductionJour",      Integer.parseInt    (sdfDay.format(getPay)));
+	        /* B1 */ deductionData.put("TTC",                Double.parseDouble  (dp.txtTTCPan3.getText()));
+	        /* B2 */ deductionData.put("HT",                 Double.parseDouble  (dp.txtHTPan3.getText()));
+	        /* B3 */ deductionData.put("TVA",                Double.parseDouble  (dp.txtTVAPan3.getText()));
+		    /* E1 */ namePDFData.  put("NameDeduction",                          (String) dp.boxPDFDeduction.getSelectedItem());
+	
+	        // Vérification si la ligne existe déjà
+	        List<Map<String, Object>> existingPDFData = db.getPDF();
+		        
+	        boolean exists = existingPDFData.stream().anyMatch(f -> 
+	        {
+	        	Object nameDeduction = f.get("NameDeduction");
+		        String newNameDeduction = (String) namePDFData.get("NameDeduction");
+		        
+	        	return nameDeduction != null && nameDeduction.equals(newNameDeduction);
+	        });
+	         
+	        if (exists)
+	        {
+	            JOptionPane.showMessageDialog(dp.fen, "Une facture pour ce mois existe déjà",
+	                                                  "Doublon",
+	                                                  JOptionPane.WARNING_MESSAGE);
+	            return;
+	        }
+	
+	        // Insertion dans la base de données
+	        db.setDeductionData(deductionData);
+	        db.setNamePDFData(namePDFData);
+	        JOptionPane.showMessageDialog(dp.fen, "Facture enregistrée avec succès",
+	                                                "Enregistement réussi !",
+	                                                JOptionPane.INFORMATION_MESSAGE);
         }
-
-        // Insertion dans la base de données
-        db.setDeductionData(deductionData);
-        db.setDirectoryData(directoryData);
-        db.setNamePDFData(namePDFData);
-        JOptionPane.showMessageDialog(dp.fen, "Facture enregistrée avec succès",
-                                                "Enregistement réussi !",
-                                                JOptionPane.INFORMATION_MESSAGE);
+        catch (NumberFormatException e)
+        {
+            JOptionPane.showMessageDialog(dp.fen, "Erreur de format numérique : " + e.getMessage(),
+                    							  "Erreur",
+                    							  JOptionPane.ERROR_MESSAGE);    	
+        }
+        catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(dp.fen, "Erreur lors de l'enregistrement : " + e.getMessage(),
+                    							  "Erreur",
+                    							  JOptionPane.ERROR_MESSAGE);
+        }
     }
     
 

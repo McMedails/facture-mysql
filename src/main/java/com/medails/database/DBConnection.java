@@ -52,8 +52,8 @@ public class DBConnection
 
         try
         {
-            // Chargement du drive MySQL                                   // Chargement du driver SQLite  
-            Class.forName("com.mysql.cj.jdbc.Driver");           // Class.forName("org.sqlite.JDBC");
+            // Chargement du drive MySQL                                             // Chargement du driver SQLite  
+            Class.forName("com.mysql.cj.jdbc.Driver");                               // Class.forName("org.sqlite.JDBC");
 
             // Etablir la connexion
             conn = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -77,6 +77,8 @@ public class DBConnection
                                 READ
     *************************************************************/
 
+    /****************** List<Map<String, Object> ****************/
+ 
     // Récupère les données du tableau "facture"
     public List<Map<String, Object>> getFacture()
     {
@@ -115,67 +117,7 @@ public class DBConnection
         return factureList;
     }
 
-
-    // Récupère toutes les données du tableau "namePDF"
-    public List<Map<String, Object>> getPDF()
-    {
-        List<Map<String, Object>> namePDFList = new ArrayList<>();
-
-        String query = "SELECT NameFacture, NameDecla, NameDeduction FROM namePDF";
-
-        try (Connection conn = connect();
-                PreparedStatement pstmt = conn.prepareStatement(query);
-                    ResultSet rs = pstmt.executeQuery())    
-        {
-            while (rs.next())
-            {
-                Map<String, Object> row = new HashMap<>();
-                row.put("NameFacture",      rs.getString    ("NameFacture"));
-                row.put("NameDecla",        rs.getString    ("NameDecla"));
-                row.put("NameDeduction",    rs.getString    ("NameDeduction"));
-                namePDFList.add(row);
-            }
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-        return namePDFList;
-    }
-
     
-    // Récupère une colonne spécifique du tableau "namePDF"
-    public List<String> getPDFs(String column)
-    {
-        List<String> pdfs = new ArrayList<>();
-
-        // Validation de la colonne demandée
-        if (!List.of("NameFacture", "NameDecla", "NameDeduction").contains(column))
-        {
-            throw new IllegalArgumentException("Colonne invalide : " + column);
-        }
-
-        String query = "SELECT " + column + " FROM namepdf";
-
-        try (Connection conn = connect();
-                PreparedStatement pstmt = conn.prepareStatement(query);
-                    ResultSet rs = pstmt.executeQuery())    
-        {
-            while (rs.next())
-            {
-                pdfs.add(rs.getString(column));
-            }
-
-            Collections.sort(pdfs);
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-        return pdfs;
-    }
-
-
     // Récupère toutes les données du tableau "directory"
     public List<Map<String, Object>> getDirectory()
     {
@@ -204,6 +146,67 @@ public class DBConnection
     }
 
     
+    // Récupère toutes les données du tableau "namePDF"
+    public List<Map<String, Object>> getPDF()
+    {
+        List<Map<String, Object>> namePDFList = new ArrayList<>();
+
+        String query = "SELECT NameFacture, NameDecla, NameDeduction FROM namepdf";
+
+        try (Connection conn = connect();
+                PreparedStatement pstmt = conn.prepareStatement(query);
+                    ResultSet rs = pstmt.executeQuery())    
+        {
+            while (rs.next())
+            {
+                Map<String, Object> row = new HashMap<>();
+                row.put("NameFacture",      rs.getString    ("NameFacture"));
+                row.put("NameDecla",        rs.getString    ("NameDecla"));
+                row.put("NameDeduction",    rs.getString    ("NameDeduction"));
+                namePDFList.add(row);
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return namePDFList;
+    }
+    
+    
+    // Récupère les données du tableau "deduction"
+    public List<Map<String, Object>> getDedution()
+    {
+        List<Map<String, Object>> deductionList = new ArrayList<>();
+
+        String query = "SELECT DeductionAnnee, DeductionMois, DeductionJour, TTC, HT, TVA FROM deduction";
+
+        try (Connection conn = connect();
+                PreparedStatement pstmt = conn.prepareStatement(query);
+                    ResultSet rs = pstmt.executeQuery())
+        {
+            while (rs.next())
+            {
+                Map<String, Object> row = new HashMap<>();
+                row.put("DeductionAnnee",    rs.getInt       ("DeductionAnnee"));
+                row.put("DeductionMois",     rs.getString    ("DeductionMois"));
+                row.put("DeductionJour",     rs.getInt       ("DeductionJour"));
+                row.put("TTC",               rs.getDouble    ("TTC"));
+                row.put("HT",                rs.getDouble    ("HT"));
+                row.put("TVA",               rs.getDouble    ("TVA"));
+                deductionList.add(row);
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return deductionList;
+    }
+    
+    
+    /******************** List<String, Object> ******************/
+
     // Récupère une colonne spécifique du tableau "directory"
     public List<String> getDirectories(String column)
     {
@@ -223,7 +226,11 @@ public class DBConnection
         {
             while (rs.next())
             {
-                directories.add(rs.getString(column));
+            	String value = rs.getString(column);
+                if (value != null)
+                {
+                	directories.add(value);
+                }
             }
             
             Collections.sort(directories);
@@ -234,39 +241,44 @@ public class DBConnection
         }
         return directories;
     }
-
-
-    // Récupère les données du tableau "deduction"
-    public List<Map<String, Object>> getDedution()
+    
+    
+    // Récupère une colonne spécifique du tableau "namePDF"
+    public List<String> getPDFs(String column)
     {
-        List<Map<String, Object>> deductionList = new ArrayList<>();
+        List<String> pdfs = new ArrayList<>();
 
-        String query = "SELECT DeductionAnnee, DeductionMois, DeductionJour, Annee, TTC, HT, TVA FROM deduction";
+        // Validation de la colonne demandée
+        if (!List.of("NameFacture", "NameDecla", "NameDeduction").contains(column))
+        {
+            throw new IllegalArgumentException("Colonne invalide : " + column);
+        }
+
+        String query = "SELECT " + column + " FROM namepdf";
 
         try (Connection conn = connect();
                 PreparedStatement pstmt = conn.prepareStatement(query);
-                    ResultSet rs = pstmt.executeQuery())
+                    ResultSet rs = pstmt.executeQuery())    
         {
             while (rs.next())
             {
-                Map<String, Object> row = new HashMap<>();
-                row.put("DeductionAnnee",    rs.getInt       ("DeductionAnnee"));
-                row.put("DeductionMois",     rs.getString    ("DeductionMois"));
-                row.put("DeductionJour",     rs.getInt       ("DeductionJour"));
-                row.put("Annee",             rs.getInt       ("Annee"));
-                row.put("TTC",               rs.getDouble    ("TTC"));
-                row.put("HT",                rs.getDouble    ("HT"));
-                row.put("TVA",               rs.getDouble    ("TVA"));
-                deductionList.add(row);
+            	String value = rs.getString(column);
+            	if (value != null)
+            	{
+            		pdfs.add(value);
+            	}
             }
+
+            Collections.sort(pdfs);
         }
         catch (SQLException e)
         {
             e.printStackTrace();
         }
-        return deductionList;
+        return pdfs;
     }
-
+    
+    
     /************************************************************ 
                                 WRITE
     *************************************************************/
@@ -274,27 +286,34 @@ public class DBConnection
     // Ajout des données dans le tableau "facture"
     public void setFactureData(Map<String, Object> factureData)
     {
+    	// Vérification des valeurs obligatoires
+    	if (factureData.get("FactureAnnee") == null || factureData.get("VersementAnnee") == null ||
+    			factureData.get("VersementJour") == null || factureData.get("Jours") == null)
+    	{
+    		throw new IllegalArgumentException("Données manquantes dans factureData");
+   		}
+    			
         String query = "INSERT INTO facture " +
-                          "(FactureAnne, FactureMois " +
-                              "VersementAnnee, VersementMois, VersementJour " +
-                                  "Jours, TJM, TTC, HT, TVA, Taxes, Benefices) VALUE " +
+                          "(FactureAnnee, FactureMois, " +
+                              "VersementAnnee, VersementMois, VersementJour, " +
+                                  "Jours, TJM, TTC, HT, TVA, Taxes, Benefices) VALUES " +
                                       "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = connect();
                 PreparedStatement psntmt = conn.prepareStatement(query))
         {
-            psntmt.setInt       (1,  (int)       factureData.get("FactureAnne"));
-            psntmt.setString    (2,  (String)    factureData.get("FactureMois"));
-            psntmt.setInt       (3,  (int)       factureData.get("VersementAnnee"));  
-            psntmt.setString    (4,  (String)    factureData.get("VersementMois"));
-            psntmt.setInt       (5,  (int)       factureData.get("VersementJour"));
-            psntmt.setInt       (6,  (int)       factureData.get("Jours"));
-            psntmt.setDouble    (7,  (double)    factureData.get("TJM"));
-            psntmt.setDouble    (8,  (double)    factureData.get("TTC"));
-            psntmt.setDouble    (9,  (double)    factureData.get("HT"));
-            psntmt.setDouble    (10, (double)    factureData.get("TVA"));
-            psntmt.setDouble    (11, (double)    factureData.get("Taxes"));
-            psntmt.setDouble    (12, (double)    factureData.get("Benefices"));
+            psntmt.setInt       (1,  (Integer)       factureData.get("FactureAnnee"));
+            psntmt.setString    (2,  (String)        factureData.get("FactureMois"));
+            psntmt.setInt       (3,  (Integer)       factureData.get("VersementAnnee"));  
+            psntmt.setString    (4,  (String)        factureData.get("VersementMois"));
+            psntmt.setInt       (5,  (Integer)       factureData.get("VersementJour"));
+            psntmt.setInt       (6,  (Integer)       factureData.get("Jours"));
+            psntmt.setDouble    (7,  (Double)        factureData.get("TJM"));
+            psntmt.setDouble    (8,  (Double)        factureData.get("TTC"));
+            psntmt.setDouble    (9,  (Double)        factureData.get("HT"));
+            psntmt.setDouble    (10, (Double)        factureData.get("TVA"));
+            psntmt.setDouble    (11, (Double)        factureData.get("Taxes"));
+            psntmt.setDouble    (12, (Double)        factureData.get("Benefices"));
 
             psntmt.executeUpdate();
             JOptionPane.showMessageDialog(dp.fen, "Facture ajoutée avec succès !",
@@ -304,29 +323,7 @@ public class DBConnection
         catch (SQLException e)
         {
             e.printStackTrace();
-        }
-    }
-
-
-    // Ajout des données dans le tableau "namePDF"
-    public void setNamePDFData(Map<String, Object> namePDFData)
-    {
-        String query = "INSERT INTO namepdf " +
-                            "(NameFacture, NameDecla, NameDeduction) VALUE " +
-                                "(?, ?, ?)";
-
-        try (Connection conn = connect();
-                PreparedStatement psntmt = conn.prepareStatement(query))
-        {
-            psntmt.setString    (1, (String)    namePDFData.get("NameFacture"));
-            psntmt.setString    (2, (String)    namePDFData.get("NameDecla"));
-            psntmt.setString    (3, (String)    namePDFData.get("NameDeduction"));
-
-            psntmt.executeUpdate();
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
+            throw new RuntimeException("Erreur lors de l'insertion des données de facture", e);
         }
     }
 
@@ -335,7 +332,7 @@ public class DBConnection
     public void setDirectoryData(Map<String, Object> directoryData)
     {
         String query = "INSERT INTO directory " +
-                            "(RepFacture, RepDecla, RepDeduction) VALUE " +
+                            "(RepFacture, RepDecla, RepDeduction) VALUES " +
                                 "(?, ?, ?)";
 
         try (Connection conn = connect();
@@ -350,32 +347,60 @@ public class DBConnection
         catch (SQLException e)
         {
             e.printStackTrace();
+            throw new RuntimeException("Erreur lors de l'insertion des données de directory", e);
+
         }
     }
 
-
-    // AJout des données dans le tableau "deduction"
-    public void setDeductionData(Map<String, Object> deductionData)
+ 
+    // Ajout des données dans le tableau "namePDF"
+    public void setNamePDFData(Map<String, Object> namePDFData)
     {
-        String query = "INSERT INTO deduction " +
-                            "(Annee, Mois, Jour, TTC, HT, TVA) VALUE " +
+        String query = "INSERT INTO namepdf " +
+                            "(NameFacture, NameDecla, NameDeduction) VALUES " +
                                 "(?, ?, ?)";
-        
+
         try (Connection conn = connect();
                 PreparedStatement psntmt = conn.prepareStatement(query))
         {
-            psntmt.setInt       (1, (int)       deductionData.get("Annee"));
-            psntmt.setString    (2, (String)    deductionData.get("Mois"));
-            psntmt.setInt       (3, (int)       deductionData.get("Jour"));
-            psntmt.setDouble    (4, (double)    deductionData.get("TTC"));
-            psntmt.setDouble    (5, (double)    deductionData.get("HT"));
-            psntmt.setDouble    (6, (double)    deductionData.get("TVA"));
+            psntmt.setString    (1, (String)    namePDFData.get("NameFacture"));
+            psntmt.setString    (2, (String)    namePDFData.get("NameDecla"));
+            psntmt.setString    (3, (String)    namePDFData.get("NameDeduction"));
 
             psntmt.executeUpdate();
         }
         catch (SQLException e)
         {
             e.printStackTrace();
+            throw new RuntimeException("Erreur lors de l'insertion des données de namepdf", e);
+
+        }
+    }
+    
+
+    // AJout des données dans le tableau "deduction"
+    public void setDeductionData(Map<String, Object> deductionData)
+    {
+        String query = "INSERT INTO deduction " +
+                            "(DeductionAnnee, DeductionMois, DeductionJour, TTC, HT, TVA) VALUES " +
+                                "(?, ?, ?, ?, ?, ?)";
+        
+        try (Connection conn = connect();
+                PreparedStatement psntmt = conn.prepareStatement(query))
+        {
+            psntmt.setInt       (1, (Integer)       deductionData.get("DeductionAnnee"));
+            psntmt.setString    (2, (String)        deductionData.get("DeductionMois"));
+            psntmt.setInt       (3, (Integer)       deductionData.get("DeductionJour"));
+            psntmt.setDouble    (4, (Double)        deductionData.get("TTC"));
+            psntmt.setDouble    (5, (Double)        deductionData.get("HT"));
+            psntmt.setDouble    (6, (Double)        deductionData.get("TVA"));
+
+            psntmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException("Erreur lors de l'insertion des données de déduction", e);
         } 
     }
 }               
