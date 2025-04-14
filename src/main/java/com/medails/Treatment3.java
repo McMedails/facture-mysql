@@ -73,9 +73,12 @@ public class Treatment3
         dp.boxYearsDeduction       .addActionListener (e -> graphYearMonth());
         dp.butOpenDeduction        .addActionListener (e -> tr1.openPDF(dp.boxRepDeduction, dp.boxPDFDeduction));
         dp.butSearchDeduction      .addActionListener (e -> tr1.searchDirectory(dp.boxRepDeduction, dp.boxPDFDeduction, DIRECTORY_DEDUCTION));
+        dp.butDeleteDeduction      .addActionListener (e -> tr1.deletePDF(dp.boxPDFDeduction, "deduction", "NameDeduction"));
         dp.butSaveDeduction        .addActionListener (e -> saveDataListener());
-                                    tr1.popupListener (dp.boxRepDeduction, dp.boxPDFDeduction, "RepDeduction", "NameDeduction");
-        dp.butResetDeduction       .addActionListener (e -> clearListener());     
+                                    tr1.popupListener (dp.boxRepDeduction, dp.boxPDFDeduction, 
+                                                        "deduction", "RepDeduction",
+                                                        "deduction", "NameDeduction"); 
+        dp.butReset3               .addActionListener (e -> clearListener());     
     }
 
     /*********************************************************** 
@@ -98,7 +101,7 @@ public class Treatment3
         boolean     refreshYear   = false;
 
         // Récupère les données de la DB
-        List<Map<String, Object>> deductions = db.getDedution();
+        List<Map<String, Object>> deductions = db.getDeduction();
 
         for (Map<String, Object> deduction : deductions)
         {
@@ -169,7 +172,7 @@ public class Treatment3
         String selectedYear = dp.boxYearsDeduction.getSelectedItem().toString();
 
         // Récupère les données de la DB
-        List<Map<String, Object>> deductions = db.getDedution();
+        List<Map<String, Object>> deductions = db.getDeduction();
 
         // Réinitialiation du tableau de données
         for (int ii = 0; ii < gr.GRAPHMONTHS.length; ii++)
@@ -272,7 +275,7 @@ public class Treatment3
     }
 
 
-   // F1 -> Enrengistrer
+   // F2 -> Enrengistrer
     public void saveDataListener()
     {
         // Vérification cellule non-vide : Déduction
@@ -295,25 +298,26 @@ public class Treatment3
 	
 	        // Récupération des valeurs depuis l'infercace utilisateur
 	        Map<String, Object> deductionData = new HashMap<>();
-	        Map<String, Object> namePDFData   = new HashMap<>();
 	
-	        /* A1 */ deductionData.put("DeductionAnnee",     Integer.parseInt    (sdfYear.format((getPay))));
-	        /* A1 */ deductionData.put("DeductionMois",      sdfMonth.format     (getPay));
-	        /* A1 */ deductionData.put("DeductionJour",      Integer.parseInt    (sdfDay.format(getPay)));
-	        /* B1 */ deductionData.put("TTC",                Double.parseDouble  (dp.txtTTCPan3.getText()));
-	        /* B2 */ deductionData.put("HT",                 Double.parseDouble  (dp.txtHTPan3.getText()));
-	        /* B3 */ deductionData.put("TVA",                Double.parseDouble  (dp.txtTVAPan3.getText()));
-		    /* E1 */ namePDFData.  put("NameDeduction",                          (String) dp.boxPDFDeduction.getSelectedItem());
+	        /* A1 */ deductionData.  put("DeductionAnnee",     Integer.parseInt     (sdfYear.format((getPay))));
+	        /* A1 */ deductionData.  put("DeductionMois",      sdfMonth.format      (getPay));
+	        /* A1 */ deductionData.  put("DeductionJour",      Integer.parseInt     (sdfDay.format(getPay)));
+	        /* B1 */ deductionData.  put("TTC",                Double.parseDouble   (dp.txtTTCPan3.getText()));
+	        /* B2 */ deductionData.  put("HT",                 Double.parseDouble   (dp.txtHTPan3.getText()));
+	        /* B3 */ deductionData.  put("TVA",                Double.parseDouble   (dp.txtTVAPan3.getText()));
+            /* D1 */ deductionData.  put("RepDeduction",                            (String) dp.boxRepDeduction.getSelectedItem());
+		    /* E1 */ deductionData.  put("NameDeduction",                           (String) dp.boxPDFDeduction.getSelectedItem());
 	
 	        // Vérification si la ligne existe déjà
-	        List<Map<String, Object>> existingPDFData = db.getPDF();
+	        List<Map<String, Object>> existingPDFData = db.getDeduction();
 		        
 	        boolean exists = existingPDFData.stream().anyMatch(f -> 
 	        {
-	        	Object nameDeduction = f.get("NameDeduction");
-		        String newNameDeduction = (String) namePDFData.get("NameDeduction");
-		        
-	        	return nameDeduction != null && nameDeduction.equals(newNameDeduction);
+	        	String nameDeduction = f.containsKey("NameDeduction") ? (String) f.get("NameDeduction") : null;
+		        String newNameDeduction  = (String) deductionData.get("NameDeduction");
+		        		        
+		        // Comparaison stricte, mais en tenant compte des cas nuls
+	        	return (newNameDeduction  != null && newNameDeduction.equals(nameDeduction));
 	        });
 	         
 	        if (exists)
@@ -326,7 +330,6 @@ public class Treatment3
 	
 	        // Insertion dans la base de données
 	        db.setDeductionData(deductionData);
-	        db.setNamePDFData(namePDFData);
 	        JOptionPane.showMessageDialog(dp.fen, "Facture enregistrée avec succès",
 	                                                "Enregistement réussi !",
 	                                                JOptionPane.INFORMATION_MESSAGE);
@@ -346,7 +349,7 @@ public class Treatment3
     }
     
 
-    // F2 -> RAZ
+    // F3 -> RAZ
     private void clearListener()
     {
         /* A1 */ dp.dateDeduction.setDate(null); 

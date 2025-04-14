@@ -60,66 +60,66 @@ public class Display
     public GridBagConstraints gbc;
 
     /*********** Onglet 1 ***************/
-    public JComboBox<String>     boxYears;               { boxYears             = new JComboBox<String> ();}                          // A1 - Années
-    public JComboBox<String>     boxMonths;              { boxMonths            = new JComboBox<String> ();}                          // A2 - Mois
-    public JDateChooser          datePay;                { datePay              = new JDateChooser      ();}                          // A3 - Date de paiement
-    public JTextField            txtDays;                { txtDays              = new JTextField        ();}                          // B1 - Jours travaillés
-    public JTextField            txtTJM;                 { txtTJM               = new JTextField        ();}                          // B2 - TJM
-    public JButton               butTVA;                 { butTVA               = new JButton           ("Calculer");}           // B3 - Calcule TVA (BP)
-    public JTextField            txtTTC;                 { txtTTC               = new JTextField        ();}                          // C1 - Résultat TTC
-    public JTextField            txtHT;                  { txtHT                = new JTextField        ();}                          // C2 - Résultat HT
-    public JTextField            txtTVA;                 { txtTVA               = new JTextField        ();}                          // C3 - Différence TVA  
-    public JTextField            txtTaxe;                { txtTaxe              = new JTextField        ();}                          // D1 - Taxe URSSAF
-    public JTextField            txtBenefit;             { txtBenefit           = new JTextField        ();}                          // D2 - Différence Taxe
-    public JButton               butOpenFacture;         { butOpenFacture       = new JButton           ("Ouvrir");}             // E1 - Ouvrir facture
-    public JButton               butSearchFacture;       { butSearchFacture     = new JButton           ("Parcourir");}          // E2 - Parcourir facture
-    public JButton               butRep1;                { butRep1              = new JButton           ("...");}                // ... - Renseignement du répertoire -> Facture
-    public JComboBox<String>     boxRep1;                { boxRep1              = new JComboBox<String> ();}                          // F1 - Barre de recherche Facture (Réperoitre)
-    public JComboBox<String>     boxPDF1;                { boxPDF1              = new JComboBox<String> ();}                          // G1 - Barre de recherche Facture (Nom du PDF) 
-    public JButton               butOpenDecla;           { butOpenDecla         = new JButton           ("Ouvrir");}             // H1 - Ouvrir déclaration
-    public JButton               butSearchDecla;         { butSearchDecla       = new JButton           ("Parcourir");}          // H2 - Parcourir déclaration
-    public JButton               butPDF1;                { butPDF1              = new JButton           ("...");}                // ... -  Renseignement du répertoire -> Déclaration
-    public JComboBox<String>     boxRep2;                { boxRep2              = new JComboBox<String> ();}                          // I1 - Barre de recherche Déclaration (Réperoitre)
-    public JComboBox<String>     boxPDF2;                { boxPDF2              = new JComboBox<String> ();}                          // J1 - Barre de recherche Déclaration (Nom du PDF)
-    public JButton               butSave;                { butSave              = new JButton           ("Enregistrer");}        // K1 - Enregistrer
-    public JButton               butReset1;              { butReset1            = new JButton           ("RAZ");}                // K2 - RAZ
+    public JComboBox<String>     boxYears;               { boxYears             = new JComboBox<String> ();}                                // A1 - Années
+    public JComboBox<String>     boxMonths;              { boxMonths            = new JComboBox<String> ();}                                // A2 - Mois
+    public JDateChooser          datePay;                { datePay              = new JDateChooser      ();}                                // A3 - Date de paiement
+    public JTextField            txtDays;                { txtDays              = new JTextField        ();}                                // B1 - Jours travaillés
+    public JTextField            txtTJM;                 { txtTJM               = new JTextField        ();}                                // B2 - TJM
+    public JButton               butTVA;                 { butTVA               = new JButton           ("Calculer");}                 // B3 - Calcule TVA (BP)
+    public JTextField            txtTTC;                 { txtTTC               = new JTextField        ();}                                // C1 - Résultat TTC
+    public JTextField            txtHT;                  { txtHT                = new JTextField        ();}                                // C2 - Résultat HT
+    public JTextField            txtTVA;                 { txtTVA               = new JTextField        ();}                                // C3 - Différence TVA  
+    public JTextField            txtTaxe;                { txtTaxe              = new JTextField        ();}                                // D1 - Taxe URSSAF
+    public JTextField            txtBenefit;             { txtBenefit           = new JTextField        ();}                                // D2 - Différence Taxe
+    public JButton               butOpenFacture;         { butOpenFacture       = new JButton           ("Ouvrir");}                   // E1 - Ouvrir facture
+    public JButton               butSearchFacture;       { butSearchFacture     = new JButton           ("Parcourir");}                // E2 - Parcourir facture
+    public JComboBox<String>     boxRep1;                { boxRep1              = new JComboBox<String> ();}                                // F1 - Barre de recherche Facture (Réperoitre)
+    public JComboBox<String>     boxPDF1;                { boxPDF1              = new JComboBox<String> ();}                                // G1 - Barre de recherche Facture (Nom du PDF) 
+    public JButton               butOpenDecla;           { butOpenDecla         = new JButton           ("Ouvrir");}                   // H1 - Ouvrir déclaration
+    public JButton               butSearchDecla;         { butSearchDecla       = new JButton           ("Parcourir");}                // H2 - Parcourir déclaration
+    public JComboBox<String>     boxRep2;                { boxRep2              = new JComboBox<String> ();}                                // I1 - Barre de recherche Déclaration (Réperoitre)
+    public JComboBox<String>     boxPDF2;                { boxPDF2              = new JComboBox<String> ();}                                // J1 - Barre de recherche Déclaration (Nom du PDF)
+    public JButton 				 butDelete;				 { butDelete			= new JButton			("Supprimer");}			    // K1 - Supprimer
+    public JButton               butSave;                { butSave              = new JButton           ("Enregistrer");}              // K2 - Enregistrer
+    public JButton               butReset1;              { butReset1            = new JButton           ("RAZ");}                      // K3 - RAZ
 
     /*********** Onglet 2 ***************/
     public final int MINRANGE_DECADEPAN2     = 30000;     public final int MAXRANGE_DECADEPAN2     = 100000;
     public final int MINRANGE_YEARMONTHPAN2  = 10000;     public final int MAXRANGE_YEARMONTHPAN2  = 20000; 
     public JSlider               sliDecadePan2;          { sliDecadePan2        = new JSlider           (JSlider.HORIZONTAL, MINRANGE_DECADEPAN2, MAXRANGE_DECADEPAN2, MINRANGE_DECADEPAN2);}   
     public JSlider               sliYearMonthPan2;       { sliYearMonthPan2     = new JSlider           (JSlider.HORIZONTAL, MINRANGE_YEARMONTHPAN2, MAXRANGE_YEARMONTHPAN2, MINRANGE_YEARMONTHPAN2);}  
-    public JToggleButton         togTotal;               { togTotal             = new JToggleButton     ();}                          // Déduction TVA           
-    public JCheckBox             cckTTCPan2;             { cckTTCPan2           = new JCheckBox         ("", true);}    // A1 - TTC
-    public JCheckBox             cckTVAPan2;             { cckTVAPan2           = new JCheckBox         ("", true);}    // A2 - TVA
-    public JCheckBox             cckHTPan2;              { cckHTPan2            = new JCheckBox         ("", true);}    // A3 - HT
-    public JCheckBox             cckTaxePan2  ;          { cckTaxePan2          = new JCheckBox         ("", true);}    // A4 - Urssaf
-    public JCheckBox             cckBenefitPan2;         { cckBenefitPan2       = new JCheckBox         ("", true);}    // A5 - Bénéfices
-    public JComboBox<String>     boxYearsTotal;          { boxYearsTotal        = new JComboBox<String> ();}                          // B1 - Années
-    public JTextField            txtTotalTTC;            { txtTotalTTC          = new JTextField        ();}                          // C1 - Résultat Total TTC
-    public JTextField            txtTotalHT;             { txtTotalHT           = new JTextField        ();}                          // C2 - Résultat Total HT
-    public JTextField            txtTotalTVA;            { txtTotalTVA          = new JTextField        ();}                          // C3 - TVA Total
-    public JTextField            txtTotalTaxe;           { txtTotalTaxe         = new JTextField        ();}                          // D1 - Taxe Total
-    public JTextField            txtTotalBenefit;        { txtTotalBenefit      = new JTextField        ();}                          // D2 - Bénéfice Total
-    public JButton               butReset2;              { butReset2            = new JButton           ("RAZ");}              // D3 - RAZ
+    public JToggleButton         togTotal;               { togTotal             = new JToggleButton     ();}                                // Déduction TVA           
+    public JCheckBox             cckTTCPan2;             { cckTTCPan2           = new JCheckBox         ("", true);}    		// A1 - TTC
+    public JCheckBox             cckTVAPan2;             { cckTVAPan2           = new JCheckBox         ("", true);}    		// A2 - TVA
+    public JCheckBox             cckHTPan2;              { cckHTPan2            = new JCheckBox         ("", true);}    		// A3 - HT
+    public JCheckBox             cckTaxePan2  ;          { cckTaxePan2          = new JCheckBox         ("", true);}    		// A4 - Urssaf
+    public JCheckBox             cckBenefitPan2;         { cckBenefitPan2       = new JCheckBox         ("", true);}    		// A5 - Bénéfices
+    public JComboBox<String>     boxYearsTotal;          { boxYearsTotal        = new JComboBox<String> ();}                                // B1 - Années
+    public JTextField            txtTotalTTC;            { txtTotalTTC          = new JTextField        ();}                                // C1 - Résultat Total TTC
+    public JTextField            txtTotalHT;             { txtTotalHT           = new JTextField        ();}                                // C2 - Résultat Total HT
+    public JTextField            txtTotalTVA;            { txtTotalTVA          = new JTextField        ();}                                // C3 - TVA Total
+    public JTextField            txtTotalTaxe;           { txtTotalTaxe         = new JTextField        ();}                                // D1 - Taxe Total
+    public JTextField            txtTotalBenefit;        { txtTotalBenefit      = new JTextField        ();}                                // D2 - Bénéfice Total
+    public JButton               butReset2;              { butReset2            = new JButton           ("RAZ");}                      // D3 - RAZ
 
     /*********** Onglet 3 ***************/ 
     public final int MINRANGE_DECADEPAN3     = 10000;     public final int MAXRANGE_DECADEPAN3     = 25000;
     public final int MINRANGE_YEARMONTHPAN3  = 5000;      public final int MAXRANGE_YEARMONTHPAN3  = 10000; 
     public JSlider               sliDecadePan3;          { sliDecadePan3        = new JSlider           (JSlider.HORIZONTAL, MINRANGE_DECADEPAN3, MAXRANGE_DECADEPAN3, MINRANGE_DECADEPAN3);}   
     public JSlider               sliYearMonthPan3;       { sliYearMonthPan3     = new JSlider           (JSlider.HORIZONTAL, MINRANGE_YEARMONTHPAN3, MAXRANGE_YEARMONTHPAN3, MINRANGE_YEARMONTHPAN3);}                    
-    public JDateChooser          dateDeduction;          { dateDeduction        = new JDateChooser      ();}                          // A1 - Date de paiement 
-    public JComboBox<String>     boxYearsDeduction;      { boxYearsDeduction    = new JComboBox<String> ();}                          // A2 - Déduction
-    public JTextField            txtTTCPan3;             { txtTTCPan3           = new JTextField        ();}                          // B1 - Résultat TTC
-    public JTextField            txtHTPan3;              { txtHTPan3            = new JTextField        ();}                          // B2 - Résultat HT 
-    public JTextField            txtTVAPan3;             { txtTVAPan3           = new JTextField        ();}                          // B3 - Résultat TVA
-    public JButton               butOpenDeduction;       { butOpenDeduction     = new JButton           ("Ouvrir");}             // C1 - Ouvrir Déduction
-    public JButton               butSearchDeduction;     { butSearchDeduction   = new JButton           ("Parcourir");}          // C2 - Parcourir Déduction
-    public JButton               butPDF3;                { butPDF3              = new JButton           ("...");}                // ... -  Renseignement du répertoire -> Déclaration
-    public JComboBox<String>     boxRepDeduction;        { boxRepDeduction      = new JComboBox<String> ();}                          // D1 - Barre de recherche Déduction (Réperoitre)
-    public JComboBox<String>     boxPDFDeduction;        { boxPDFDeduction      = new JComboBox<String> ();}                          // E1 - Barre de recherche Déduction (Nom du PDF)
-    public JButton               butSaveDeduction;       { butSaveDeduction     = new JButton           ("Enregistrer");}        // F1 - Enregistrer
-    public JButton               butResetDeduction;      { butResetDeduction    = new JButton           ("RAZ");}                // F2 - RAZ
+    public JDateChooser          dateDeduction;          { dateDeduction        = new JDateChooser      ();}                                // A1 - Date de paiement 
+    public JComboBox<String>     boxYearsDeduction;      { boxYearsDeduction    = new JComboBox<String> ();}                                // A2 - Déduction
+    public JTextField            txtTTCPan3;             { txtTTCPan3           = new JTextField        ();}                                // B1 - Résultat TTC
+    public JTextField            txtHTPan3;              { txtHTPan3            = new JTextField        ();}                                // B2 - Résultat HT 
+    public JTextField            txtTVAPan3;             { txtTVAPan3           = new JTextField        ();}                                // B3 - Résultat TVA
+    public JButton               butOpenDeduction;       { butOpenDeduction     = new JButton           ("Ouvrir");}                   // C1 - Ouvrir Déduction
+    public JButton               butSearchDeduction;     { butSearchDeduction   = new JButton           ("Parcourir");}                // C2 - Parcourir Déduction
+    public JComboBox<String>     boxRepDeduction;        { boxRepDeduction      = new JComboBox<String> ();}                                // D1 - Barre de recherche Déduction (Réperoitre)
+    public JComboBox<String>     boxPDFDeduction;        { boxPDFDeduction      = new JComboBox<String> ();}                                // E1 - Barre de recherche Déduction (Nom du PDF)
+    public JButton				 butDeleteDeduction;     { butDeleteDeduction   = new JButton		    ("Supprimer");}			    // F1 - Supprimer
+    public JButton               butSaveDeduction;       { butSaveDeduction     = new JButton           ("Enregistrer");}              // F2 - Enregistrer
+    public JButton               butReset3;              { butReset3            = new JButton           ("RAZ");}                      // F3 - RAZ
+
 
     // Année et mois
     private String years[] = {"", "2024", "2025", "2026", "2027", "2028"};
@@ -315,11 +315,6 @@ public class Display
         gbc.insets = new Insets(0, 10, 10, 10);
         addComposant(pan1, butSearchFacture, 2, 22, 1);
         
-        // Renseignement du répertoire -> Facture
-        gbc.insets = new Insets(0, 0, 10, 330);
-        butRep1.setPreferredSize(new Dimension(20,18));
-        addComposant(pan1, butRep1, 0, 24, 3);
-
         // F1 - Barre de recherche Facture (Réperoitre)
         gbc.insets = new Insets(0, 10, 10, 10);
         boxRep1 = createJComboBox(300, 18);
@@ -341,11 +336,6 @@ public class Display
         gbc.insets = new Insets(0, 10, 10, 10);
         addComposant(pan1, butSearchDecla, 2, 28, 1);
         
-        // Renseignement du répertoire -> Déclaration
-        gbc.insets = new Insets(0, 0, 10, 330);
-        butPDF1.setPreferredSize(new Dimension(20,18));
-        addComposant(pan1, butPDF1, 0, 30, 3);
-
         // I1 - Barre de recherche Déclaration (Réperoitre)
         gbc.insets = new Insets(0, 10, 10, 10);
         boxRep2 = createJComboBox(300, 18);
@@ -355,12 +345,18 @@ public class Display
         boxPDF2 = createJComboBox( 300, 18);
         addComposant(pan1, boxPDF2, 0, 32, 3);
 
-        // /************************ Enregistrer ************************/
-        // K1 - Enregistrer
-        addComposant(pan1, butSave, 0, 34, 2);
+        // /************************ Boutons ************************/
+        // K1 - Supprimer
+        gbc.insets = new Insets(0, 0, 10, 90);
+        addComposant(pan1, butDelete, 0, 34, 2);
+        
+        // K2 - Enregistrer
+        gbc.insets = new Insets(0, 0, 10, 75);
+        addComposant(pan1, butSave, 1, 34, 2);
 
-        // K2 - RAZ
-        addComposant(pan1, butReset1, 1, 34, 2);
+        // K3 - RAZ
+        gbc.insets = new Insets(0, 0, 10, 10);
+        addComposant(pan1, butReset1, 2, 34, 2);
     }
 
     /*********************************************************** 
@@ -529,11 +525,6 @@ public class Display
         gbc.insets = new Insets(0, 10, 10, 10);
         addComposant(pan3, butSearchDeduction, 2, 16, 1);
 
-        // Renseignement du répertoire -> Déduction
-        gbc.insets = new Insets(0, 0, 10, 330);
-        butPDF3.setPreferredSize(new Dimension(20,18));
-        addComposant(pan3, butPDF3, 0, 18, 3);
-
         // D1 - Barre de recherche Déduction (Réperoitre)
         gbc.insets = new Insets(0, 10, 10, 10);
         boxRepDeduction = createJComboBox(300, 18);
@@ -543,12 +534,18 @@ public class Display
         boxPDFDeduction = createJComboBox(300, 18);
         addComposant(pan3, boxPDFDeduction, 0, 20, 3);
     
-        // /************************ Enregistrer ************************/
-        // F1 - Enregistrer
-        addComposant(pan3, butSaveDeduction, 0, 22, 2);
+        // /************************ Boutons ************************/
+        // F1 - Supprimer
+        gbc.insets = new Insets(0, 0, 10, 90);
+        addComposant(pan3, butDeleteDeduction, 0, 22, 2);
+        
+        // F2 - Enregistrer
+        gbc.insets = new Insets(0, 0, 10, 75);
+        addComposant(pan3, butSaveDeduction, 1, 22, 2);
 
-        // F2 - RAZ
-        addComposant(pan3, butResetDeduction, 1, 22, 2);
+        // F3 - RAZ
+        gbc.insets = new Insets(0, 0, 10, 10);
+        addComposant(pan3, butReset3, 2, 22, 2);
     }
 }
                         

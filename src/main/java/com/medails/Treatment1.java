@@ -80,9 +80,15 @@ public class Treatment1
         dp.butTVA                  .addActionListener (e -> calculListener());
         dp.butSearchFacture        .addActionListener (e -> searchDirectory(dp.boxRep1, dp.boxPDF1, DIRECTORY_FACTURE));
         dp.butSearchDecla          .addActionListener (e -> searchDirectory(dp.boxRep2, dp.boxPDF2, DIRECTORY_DECLA));
-        dp.butSave                 .addActionListener (e -> saveDataListener());
-                                    popupListener     (dp.boxRep1, dp.boxPDF1, "RepFacture", "NameFacture");
-                                    popupListener     (dp.boxRep2, dp.boxPDF2, "RepDecla", "NameDecla");
+        dp.butSave                 .addActionListener (e -> saveDataListener());  
+        dp.butDelete               .addActionListener (e -> { deletePDF(dp.boxPDF1, "facture", "NameFacture");
+                                                              deletePDF(dp.boxPDF2, "facture", "NameDecla");});                                  
+        							popupListener     (dp.boxRep1, dp.boxPDF1, 
+                                                        "facture", "RepFacture",
+                                                        "facture", "NameFacture");
+                                    popupListener     (dp.boxRep2, dp.boxPDF2, 
+                                                        "facture", "RepDecla",
+                                                        "facture", "NameDecla");
         dp.butReset1               .addActionListener (e -> clearListener());
     }
 
@@ -250,7 +256,9 @@ public class Treatment1
 
 
     // Méthode générique les onglets répertoires
-    public void popupListener(JComboBox<String> boxRep, JComboBox<String> boxPDF, String columnRep, String columnPDF) 
+    public void popupListener(JComboBox<String> boxRep, JComboBox<String> boxPDF, 
+                                                    String tableRep, String columnRep,
+                                                        String tablePDF, String columnPDF) 
     {
         boxRep.addPopupMenuListener(new PopupMenuListener() 
         {
@@ -258,8 +266,8 @@ public class Treatment1
             public void popupMenuWillBecomeVisible(PopupMenuEvent e) 
             {    
                 // Récupération depuis MySQL
-                List<String> arrayRep = db.getDirectories(columnRep);
-                List<String> arrayPDF = db.getPDFs(columnPDF); 
+                List<String> arrayRep = db.getDirPDF(tableRep, columnRep);
+                List<String> arrayPDF = db.getDirPDF(tablePDF, columnPDF); 
         
                 // Mise à jour des ComboBox
                 updateComboBox(boxRep, arrayRep);
@@ -273,20 +281,42 @@ public class Treatment1
         });
     }
     
-
     public void updateComboBox (JComboBox<String> comboBox, List<String> allItems)
     {
         comboBox.removeAllItems();
-        comboBox.addItem("");
+        allItems.forEach(comboBox::addItem);
+        comboBox.setSelectedIndex(-1);
+    }
+    
 
-        for (String item : allItems)
+    // K1 -> Suppression des lignes dans la BDD
+    public void deletePDF(JComboBox box, String nameTable, String nameColumn)
+    {
+        // Vérification que la combox n'est pas vide
+        if (box.getSelectedItem() == null)
         {
-            comboBox.addItem(item);
+            JOptionPane.showMessageDialog(dp.fen, "Veuillez sélectioner au moins un PDF à supprimer",
+                                                  "Aucune sélection", 
+                                                  JOptionPane.WARNING_MESSAGE);
+            return;          
         }
+
+        // Demande de confirmation
+        int confirm = JOptionPane.showConfirmDialog(dp.fen, "Etes-vous sûr de vouloir supprimer les PDF sélectionnés ?",
+                                                            "Confirmation de suppression", 
+                                                            JOptionPane.YES_NO_OPTION);
+
+        if (confirm != JOptionPane.YES_OPTION)  {   return;   }
+
+        // Supprimer les PDF sélectionnés un par un
+        db.deleteInBDD(box, nameTable, nameColumn);
+        JOptionPane.showMessageDialog(dp.fen, "Suppression des PDF sélectionnés terminée",
+                                              "Opération réussie", 
+                                              JOptionPane.INFORMATION_MESSAGE);
     }
 
 
-    // K1 -> Enrengistrer
+    // K2 -> Enrengistrer
     public void saveDataListener()
     {
         // Vérification cellules non-vide
@@ -310,36 +340,38 @@ public class Treatment1
 	
 	        // Récupération des valeurs depuis l'infercace utilisateur
 	        Map<String, Object> factureData   = new HashMap<>();
-	        Map<String, Object> namePDFData   = new HashMap<>();
 	
 	        /* A1 */  factureData.  put("FactureAnnee",        Integer.parseInt       ((String) dp.boxYears.getSelectedItem()));
 	        /* A2 */  factureData.  put("FactureMois",                                (String) dp.boxMonths.getSelectedItem());
 	        /* A3 */  factureData.  put("VersementAnnee",      Integer.parseInt       ((sdfYear.format(getPay))));
 	        /* A3 */  factureData.  put("VersementMois",       sdfMonth.format        (getPay));
 	        /* A3 */  factureData.  put("VersementJour",       Integer.parseInt       (sdfDay.format(getPay)));
-	        /* B1 */  factureData.  put("Jours",               Integer.parseInt       (dp.txtDays.getText()));
+	        /* B1 */  factureData.  put("Jours",               Double.parseDouble     (dp.txtDays.getText()));
 	        /* B2 */  factureData.  put("TJM",                 Double.parseDouble     (dp.txtTJM.getText()));
 	        /* C1 */  factureData.  put("TTC",                 Double.parseDouble     (dp.txtTTC.getText()));
 	        /* C2 */  factureData.  put("HT",                  Double.parseDouble     (dp.txtHT.getText()));
 	        /* C3 */  factureData.  put("TVA",                 Double.parseDouble     (dp.txtTVA.getText()));
 	        /* D1 */  factureData.  put("Taxes",               Double.parseDouble     (dp.txtTaxe.getText()));
 	        /* D2 */  factureData.  put("Benefices",           Double.parseDouble     (dp.txtBenefit.getText()));
-	        /* I1 */  namePDFData.  put("NameFacture",                                (String) dp.boxPDF1.getSelectedItem());
-	        /* J1 */  namePDFData.  put("NameDecla",                                  (String) dp.boxPDF2.getSelectedItem());
+            /* F1 */  factureData.  put("RepFacture",                                 (String) dp.boxRep1.getSelectedItem());
+	        /* G1 */  factureData.  put("RepDecla",                                   (String) dp.boxRep2.getSelectedItem());
+	        /* I1 */  factureData.  put("NameFacture",                                (String) dp.boxPDF1.getSelectedItem());
+	        /* J1 */  factureData.  put("NameDecla",                                  (String) dp.boxPDF2.getSelectedItem());
 	
 	        // Vérification de l'existence du fichier 
-	        List<Map<String, Object>> existingPDFData = db.getPDF();
+	        List<Map<String, Object>> existingPDFData = db.getFacture();
 	     	        
 	        boolean exists = existingPDFData.stream().anyMatch(f -> 
-	        	    {
-	        	        Object nameFacture  = f.get("NameFacture");
-	        	        Object nameDecla    = f.get("NameDecla");
-	        	        String newNameFacture = (String) namePDFData.get("NameFacture");
-	        	        String newNameDecla   = (String) namePDFData.get("NameDecla");
-
-	        	        return nameFacture != null && nameDecla != null &&
-	        	        	   nameFacture.equals(newNameFacture) && nameDecla.equals(newNameDecla);
-	        	    });
+	        {
+	           	String nameFacture = f.containsKey("NameFacture") ? (String) f.get("NameFacture") : null;
+	           	String nameDecla   = f.containsKey("NameDecla")   ? (String) f.get("NameDecla") : null;
+	           	String newNameFacture  = (String) factureData.get("NameFacture");
+	            String newNameDecla    = (String) factureData.get("NameDecla");
+	        	        
+	           // Comparaison stricte, mais en tenant compte des cas nuls
+	           return (newNameFacture != null && newNameFacture.equals(nameFacture)) ||
+	        		   (newNameDecla  != null && newNameDecla.equals(nameDecla));
+	        });
 	
 	        if (exists)
 	        {
@@ -351,7 +383,6 @@ public class Treatment1
 	
 	        // Insertion dans la base de données
 	        db.setFactureData(factureData);
-	        db.setNamePDFData(namePDFData);
 	        JOptionPane.showMessageDialog(dp.fen, "Facture enregistrée avec succès",
 	                                              "Enregistement réussi !",
 	                                              JOptionPane.INFORMATION_MESSAGE);
@@ -371,7 +402,7 @@ public class Treatment1
     }
 
 
-    // K2 -> RAZ
+    // K3 -> RAZ
     public void clearListener()
     {
         /* A1 */ dp.boxYears.setSelectedItem("");

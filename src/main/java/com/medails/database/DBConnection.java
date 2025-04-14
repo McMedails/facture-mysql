@@ -6,11 +6,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 import com.medails.Display;
@@ -53,7 +56,7 @@ public class DBConnection
         try
         {
             // Chargement du drive MySQL                                             // Chargement du driver SQLite  
-            Class.forName("com.mysql.cj.jdbc.Driver");                               // Class.forName("org.sqlite.JDBC");
+            Class.forName("com.mysql.cj.jdbc.Driver");                     // Class.forName("org.sqlite.JDBC");
 
             // Etablir la connexion
             conn = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -85,8 +88,10 @@ public class DBConnection
         List<Map<String, Object>> factureList = new ArrayList<>();
 
         String query = "SELECT FactureAnnee, FactureMois," + 
-                               "VersementAnnee, VersementMois, VersementJour," +
-                               "Jours, TJM, TTC, HT, TVA, Taxes, Benefices FROM facture";                          
+                               "VersementAnnee, VersementMois, VersementJour, " +
+                               	 "Jours, TJM, TTC, HT, TVA, Taxes, Benefices, " +
+                               	   "RepFacture, RepDecla, " + 
+                                     "NameFacture, NameDecla FROM facture";                          
 
         try (Connection conn = connect();
                 PreparedStatement pstmt = conn.prepareStatement(query);
@@ -107,6 +112,10 @@ public class DBConnection
                 row.put("TVA"             , rs.getDouble   ("TVA"));
                 row.put("Taxes"           , rs.getDouble   ("Taxes"));
                 row.put("Benefices"       , rs.getDouble   ("Benefices"));
+                row.put("RepFacture"      , rs.getString   ("RepFacture"));
+                row.put("RepDecla"        , rs.getString   ("RepDecla"));
+                row.put("NameFacture"	  , rs.getString   ("NameFacture")); 
+                row.put("NameDecla"		  , rs.getString   ("NameDecla")); 
                 factureList.add(row);
             }
         }
@@ -117,69 +126,14 @@ public class DBConnection
         return factureList;
     }
 
-    
-    // Récupère toutes les données du tableau "directory"
-    public List<Map<String, Object>> getDirectory()
-    {
-        List<Map<String, Object>> directoryList = new ArrayList<>();
-
-        String query = "SELECT RepFacture, RepDecla, RepDeduction FROM directory";
-
-        try (Connection conn = connect();
-                PreparedStatement pstmt = conn.prepareStatement(query);
-                    ResultSet rs = pstmt.executeQuery())
-        {
-            while (rs.next())
-            {
-                Map<String, Object> row = new HashMap<>();
-                row.put("RepFacture",       rs.getString    ("RepFacture"));
-                row.put("RepDecla",         rs.getString    ("RepDecla"));
-                row.put("RepDeduction",     rs.getString    ("RepDeduction"));
-                directoryList.add(row);
-            }
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-        return directoryList;
-    }
-
-    
-    // Récupère toutes les données du tableau "namePDF"
-    public List<Map<String, Object>> getPDF()
-    {
-        List<Map<String, Object>> namePDFList = new ArrayList<>();
-
-        String query = "SELECT NameFacture, NameDecla, NameDeduction FROM namepdf";
-
-        try (Connection conn = connect();
-                PreparedStatement pstmt = conn.prepareStatement(query);
-                    ResultSet rs = pstmt.executeQuery())    
-        {
-            while (rs.next())
-            {
-                Map<String, Object> row = new HashMap<>();
-                row.put("NameFacture",      rs.getString    ("NameFacture"));
-                row.put("NameDecla",        rs.getString    ("NameDecla"));
-                row.put("NameDeduction",    rs.getString    ("NameDeduction"));
-                namePDFList.add(row);
-            }
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-        return namePDFList;
-    }
-    
-    
+   
     // Récupère les données du tableau "deduction"
-    public List<Map<String, Object>> getDedution()
+    public List<Map<String, Object>> getDeduction()
     {
         List<Map<String, Object>> deductionList = new ArrayList<>();
 
-        String query = "SELECT DeductionAnnee, DeductionMois, DeductionJour, TTC, HT, TVA FROM deduction";
+        String query = "SELECT DeductionAnnee, DeductionMois, DeductionJour," +
+        			   "TTC, HT, TVA, RepDeduction, NameDeduction FROM deduction";
 
         try (Connection conn = connect();
                 PreparedStatement pstmt = conn.prepareStatement(query);
@@ -188,12 +142,14 @@ public class DBConnection
             while (rs.next())
             {
                 Map<String, Object> row = new HashMap<>();
-                row.put("DeductionAnnee",    rs.getInt       ("DeductionAnnee"));
-                row.put("DeductionMois",     rs.getString    ("DeductionMois"));
-                row.put("DeductionJour",     rs.getInt       ("DeductionJour"));
-                row.put("TTC",               rs.getDouble    ("TTC"));
-                row.put("HT",                rs.getDouble    ("HT"));
-                row.put("TVA",               rs.getDouble    ("TVA"));
+                row.put("DeductionAnnee"   , rs.getInt       ("DeductionAnnee"));
+                row.put("DeductionMois"    , rs.getString    ("DeductionMois"));
+                row.put("DeductionJour"    , rs.getInt       ("DeductionJour"));
+                row.put("TTC"			   , rs.getDouble    ("TTC"));
+                row.put("HT"			   , rs.getDouble    ("HT"));
+                row.put("TVA"			   , rs.getDouble    ("TVA"));
+                row.put("RepDeduction"     , rs.getString    ("RepDeduction"));
+                row.put("NameDeduction"	   , rs.getString    ("NameDeduction")); 
                 deductionList.add(row);
             }
         }
@@ -204,21 +160,33 @@ public class DBConnection
         return deductionList;
     }
     
-    
+
     /******************** List<String, Object> ******************/
 
-    // Récupère une colonne spécifique du tableau "directory"
-    public List<String> getDirectories(String column)
+    // Récupère les colonnes Répertoire des tableaux SQL
+    public List<String> getDirPDF(String tableName, String columnName)
     {
-        List<String> directories = new ArrayList<>();
+        // Validation des paramètres
+        Map<String, List<String>> validColumns = new HashMap<>();
+        validColumns.put("facture", Arrays.asList("RepFacture", "RepDecla", 
+                                                            "NameFacture", "NameDecla"));
+        validColumns.put("deduction", Arrays.asList("RepDeduction", "NameDeduction"));
 
-        // Validation de la colonne demandée
-        if (!List.of("RepFacture", "RepDecla", "RepDeduction").contains(column))
+        if (!validColumns.containsKey(tableName))
         {
-            throw new IllegalArgumentException("Colonne invalide : " + column);
+            throw new IllegalArgumentException("Table invalide : " + tableName);
         }
 
-        String query = "SELECT " + column + " FROM directory";
+        if (!validColumns.get(tableName).contains(columnName))
+        {
+            throw new IllegalArgumentException(String.format
+                ("Colonne invalide pour la table %s: %s", tableName, columnName));
+        }
+
+        List<String> values = new ArrayList<>();
+
+        String query = String.format
+            ("SELECT DISTINCT %s FROM %s WHERE %s IS NOT NULL", columnName, tableName, columnName);
 
         try (Connection conn = connect();
                 PreparedStatement pstmt = conn.prepareStatement(query);
@@ -226,99 +194,60 @@ public class DBConnection
         {
             while (rs.next())
             {
-            	String value = rs.getString(column);
-                if (value != null)
+                String value = rs.getString(1);
+                if (value != null && !value.trim().isEmpty())
                 {
-                	directories.add(value);
+                    values.add(value);
                 }
             }
             
-            Collections.sort(directories);
+            Collections.sort(values);
         }
         catch (SQLException e)
         {
             e.printStackTrace();
+            System.err.printf("Erreur lors de la récupération de %s.%s; %s%n", 
+                                                tableName, columnName, e.getMessage());
         }
-        return directories;
+        return values;
     }
-    
-    
-    // Récupère une colonne spécifique du tableau "namePDF"
-    public List<String> getPDFs(String column)
-    {
-        List<String> pdfs = new ArrayList<>();
+        
 
-        // Validation de la colonne demandée
-        if (!List.of("NameFacture", "NameDecla", "NameDeduction").contains(column))
-        {
-            throw new IllegalArgumentException("Colonne invalide : " + column);
-        }
-
-        String query = "SELECT " + column + " FROM namepdf";
-
-        try (Connection conn = connect();
-                PreparedStatement pstmt = conn.prepareStatement(query);
-                    ResultSet rs = pstmt.executeQuery())    
-        {
-            while (rs.next())
-            {
-            	String value = rs.getString(column);
-            	if (value != null)
-            	{
-            		pdfs.add(value);
-            	}
-            }
-
-            Collections.sort(pdfs);
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-        return pdfs;
-    }
-    
-    
     /************************************************************ 
                                 WRITE
     *************************************************************/
 
     // Ajout des données dans le tableau "facture"
     public void setFactureData(Map<String, Object> factureData)
-    {
-    	// Vérification des valeurs obligatoires
-    	if (factureData.get("FactureAnnee") == null || factureData.get("VersementAnnee") == null ||
-    			factureData.get("VersementJour") == null || factureData.get("Jours") == null)
-    	{
-    		throw new IllegalArgumentException("Données manquantes dans factureData");
-   		}
-    			
+    {		
         String query = "INSERT INTO facture " +
                           "(FactureAnnee, FactureMois, " +
                               "VersementAnnee, VersementMois, VersementJour, " +
-                                  "Jours, TJM, TTC, HT, TVA, Taxes, Benefices) VALUES " +
-                                      "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                                  "Jours, TJM, TTC, HT, TVA, Taxes, Benefices, " + 
+                                  	  "RepFacture, RepDecla, " +
+                                         "NameFacture, NameDecla) VALUES " +
+                                           "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = connect();
                 PreparedStatement psntmt = conn.prepareStatement(query))
         {
-            psntmt.setInt       (1,  (Integer)       factureData.get("FactureAnnee"));
-            psntmt.setString    (2,  (String)        factureData.get("FactureMois"));
-            psntmt.setInt       (3,  (Integer)       factureData.get("VersementAnnee"));  
-            psntmt.setString    (4,  (String)        factureData.get("VersementMois"));
-            psntmt.setInt       (5,  (Integer)       factureData.get("VersementJour"));
-            psntmt.setInt       (6,  (Integer)       factureData.get("Jours"));
-            psntmt.setDouble    (7,  (Double)        factureData.get("TJM"));
-            psntmt.setDouble    (8,  (Double)        factureData.get("TTC"));
-            psntmt.setDouble    (9,  (Double)        factureData.get("HT"));
-            psntmt.setDouble    (10, (Double)        factureData.get("TVA"));
-            psntmt.setDouble    (11, (Double)        factureData.get("Taxes"));
-            psntmt.setDouble    (12, (Double)        factureData.get("Benefices"));
-
-            psntmt.executeUpdate();
-            JOptionPane.showMessageDialog(dp.fen, "Facture ajoutée avec succès !",
-                                                            "Enregistrement réussi",
-                                                            JOptionPane.INFORMATION_MESSAGE);
+            psntmt.setInt       	(1,  (Integer)       factureData.get("FactureAnnee"));
+            psntmt.setString    	(2,  (String)        factureData.get("FactureMois"));
+            psntmt.setInt       	(3,  (Integer)       factureData.get("VersementAnnee"));  
+            psntmt.setString    	(4,  (String)        factureData.get("VersementMois"));
+            psntmt.setInt       	(5,  (Integer)       factureData.get("VersementJour"));
+            psntmt.setDouble    	(6,  (Double)        factureData.get("Jours"));
+            psntmt.setDouble    	(7,  (Double)        factureData.get("TJM"));
+            psntmt.setDouble    	(8,  (Double)        factureData.get("TTC"));
+            psntmt.setDouble    	(9,  (Double)        factureData.get("HT"));
+            psntmt.setDouble    	(10, (Double)        factureData.get("TVA"));
+            psntmt.setDouble    	(11, (Double)        factureData.get("Taxes"));
+            psntmt.setDouble    	(12, (Double)        factureData.get("Benefices"));
+            psntmt.setString    	(13, (String)		factureData.get("RepFacture")); 
+            psntmt.setString    	(14, (String)		factureData.get("RepDecla")); 
+            psntmt.setString    	(15, (String)		factureData.get("NameFacture")); 
+            psntmt.setString    	(16, (String)		factureData.get("NameDecla")); 
+            psntmt.executeUpdate	();
         }
         catch (SQLException e)
         {
@@ -327,74 +256,25 @@ public class DBConnection
         }
     }
 
-
-    // Ajout des données dans le tableau "directory"
-    public void setDirectoryData(Map<String, Object> directoryData)
-    {
-        String query = "INSERT INTO directory " +
-                            "(RepFacture, RepDecla, RepDeduction) VALUES " +
-                                "(?, ?, ?)";
-
-        try (Connection conn = connect();
-                PreparedStatement psntmt = conn.prepareStatement(query))
-        {
-            psntmt.setString    (1, (String)    directoryData.get("RepFacture"));
-            psntmt.setString    (2, (String)    directoryData.get("RepDecla"));
-            psntmt.setString    (3, (String)    directoryData.get("RepDeduction"));
-
-            psntmt.executeUpdate();
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-            throw new RuntimeException("Erreur lors de l'insertion des données de directory", e);
-
-        }
-    }
-
  
-    // Ajout des données dans le tableau "namePDF"
-    public void setNamePDFData(Map<String, Object> namePDFData)
-    {
-        String query = "INSERT INTO namepdf " +
-                            "(NameFacture, NameDecla, NameDeduction) VALUES " +
-                                "(?, ?, ?)";
-
-        try (Connection conn = connect();
-                PreparedStatement psntmt = conn.prepareStatement(query))
-        {
-            psntmt.setString    (1, (String)    namePDFData.get("NameFacture"));
-            psntmt.setString    (2, (String)    namePDFData.get("NameDecla"));
-            psntmt.setString    (3, (String)    namePDFData.get("NameDeduction"));
-
-            psntmt.executeUpdate();
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-            throw new RuntimeException("Erreur lors de l'insertion des données de namepdf", e);
-
-        }
-    }
-    
-
     // AJout des données dans le tableau "deduction"
     public void setDeductionData(Map<String, Object> deductionData)
     {
         String query = "INSERT INTO deduction " +
-                            "(DeductionAnnee, DeductionMois, DeductionJour, TTC, HT, TVA) VALUES " +
-                                "(?, ?, ?, ?, ?, ?)";
+                            "(DeductionAnnee, DeductionMois, DeductionJour, TTC, HT, TVA, RepDeduction, NameDeduction) VALUES " +
+                                "(?, ?, ?, ?, ?, ?, ?, ?)";
         
         try (Connection conn = connect();
                 PreparedStatement psntmt = conn.prepareStatement(query))
         {
-            psntmt.setInt       (1, (Integer)       deductionData.get("DeductionAnnee"));
-            psntmt.setString    (2, (String)        deductionData.get("DeductionMois"));
-            psntmt.setInt       (3, (Integer)       deductionData.get("DeductionJour"));
-            psntmt.setDouble    (4, (Double)        deductionData.get("TTC"));
-            psntmt.setDouble    (5, (Double)        deductionData.get("HT"));
-            psntmt.setDouble    (6, (Double)        deductionData.get("TVA"));
-
+            psntmt.setInt       	(1, (Integer)       deductionData.get("DeductionAnnee"));
+            psntmt.setString    	(2, (String)        deductionData.get("DeductionMois"));
+            psntmt.setInt       	(3, (Integer)       deductionData.get("DeductionJour"));
+            psntmt.setDouble    	(4, (Double)        deductionData.get("TTC"));
+            psntmt.setDouble    	(5, (Double)        deductionData.get("HT"));
+            psntmt.setDouble    	(6, (Double)        deductionData.get("TVA"));
+            psntmt.setString    	(7, (String)	       deductionData.get("RepDeduction")); 
+            psntmt.setString    	(8, (String)	       deductionData.get("NameDeduction")); 
             psntmt.executeUpdate();
         }
         catch (SQLException e)
@@ -402,5 +282,27 @@ public class DBConnection
             e.printStackTrace();
             throw new RuntimeException("Erreur lors de l'insertion des données de déduction", e);
         } 
+    }
+
+
+    /************************************************************ 
+                                DELETE
+    *************************************************************/
+
+    public void deleteInBDD(JComboBox box, String nameTable, String nameColumn)
+    {
+        String query = "DELETE FROM " + nameTable + " WHERE " + nameColumn + " = ?";
+
+        try (Connection conn = connect();
+                PreparedStatement psntmt = conn.prepareStatement(query))
+        {
+            psntmt.setString    (1, box.getSelectedItem().toString());
+            psntmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException("Erreur lors de la suppression : ", e);
+        }
     }
 }               
