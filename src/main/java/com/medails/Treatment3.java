@@ -1,6 +1,8 @@
 package com.medails;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +34,7 @@ public class Treatment3
     {
         this.db = db;
         this.dp = dp;
-        this.gr = gr;   ;  
+        this.gr = gr;     
         this.tr1 = tr1;
         this.tr2 = tr2;
 
@@ -73,12 +75,27 @@ public class Treatment3
         dp.boxYearsDeduction       .addActionListener (e -> graphYearMonth());
         dp.butOpenDeduction        .addActionListener (e -> tr1.openPDF(dp.boxRepDeduction, dp.boxPDFDeduction));
         dp.butSearchDeduction      .addActionListener (e -> tr1.searchDirectory(dp.boxRepDeduction, dp.boxPDFDeduction, DIRECTORY_DEDUCTION));
-        dp.butDeleteDeduction      .addActionListener (e -> tr1.deletePDF(dp.boxPDFDeduction, "deduction", "NameDeduction"));
+        dp.butDeleteDeduction      .addActionListener (e -> db.deleteInBDD(dp.boxPDFDeduction, "deduction", "NameDeduction"));
         dp.butSaveDeduction        .addActionListener (e -> saveDataListener());
                                     tr1.popupListener (dp.boxRepDeduction, dp.boxPDFDeduction, 
                                                         "deduction", "RepDeduction",
                                                         "deduction", "NameDeduction"); 
-        dp.butReset3               .addActionListener (e -> clearListener());     
+        dp.butReset3               .addActionListener (e -> clearListener());  
+        
+
+        // Solution Lambda pour mettre à jour les champs
+        db.boxPDFListener(dp.boxPDFDeduction, data -> 
+        {
+            int     annee  = (int)     data.get("DeductionAnnee");
+            String  mois   = (String)  data.get("DeductionMois");
+            int     jour   = (int)     data.get("DeductionJour");
+            dp.dateDeduction.setDate(Date.from(LocalDate.of(annee, db.convertMonth(mois), jour)
+            .atStartOfDay(ZoneId.systemDefault()).toInstant()));
+
+            dp.txtTTCPan3.setText       (data.get("TTC")        .toString());
+            dp.txtHTPan3.setText        (data.get("HT")         .toString());
+            dp.txtTVAPan3.setText       (data.get("TVA")        .toString()); 
+        });
     }
 
     /*********************************************************** 
@@ -356,7 +373,7 @@ public class Treatment3
         /* B1 */ dp.txtTTCPan3.setText(""); 
         /* B2 */ dp.txtHTPan3.setText(""); 
         /* B3 */ dp.txtTVAPan3.setText(""); 
-        /* D1 */ dp.boxRepDeduction.setSelectedItem("");
-        /* D2 */ dp.boxPDFDeduction.setSelectedItem("");
+        /* D1 */ dp.boxRepDeduction.removeAllItems();
+        /* E1 */ dp.boxPDFDeduction.removeAllItems();
     } 
 }

@@ -166,7 +166,7 @@ public class Graphic
                 {
                     // Vérifier si la clé existe déjà avant d'appeler getValue()
                     boolean keyExists = categoryDataset.getColumnIndex(graph[ii]) >= 0 &&
-                                        categoryDataset.getRowIndex(categories[jj]) >= 0;
+                                            categoryDataset.getRowIndex(categories[jj]) >= 0;
     
                     // Si la clé n'existe pas, ajouter 0
                     if (!keyExists)  
@@ -201,7 +201,7 @@ public class Graphic
                 {
                     // Vérifier si la clé existe déjà avant d'appeler getValue()
                     boolean keyExists = categoryDataset1.getColumnIndex(graph[ii]) >= 0 &&
-                                        categoryDataset1.getRowIndex(categories[jj]) >= 0;
+                                            categoryDataset1.getRowIndex(categories[jj]) >= 0;
     
                     // Si la clé n'existe pas, ajouter 0
                     if (!keyExists)  
@@ -235,7 +235,7 @@ public class Graphic
                 {
                     // Vérifier si la clé existe déjà avant d'appeler getValue()
                     boolean keyExists = categoryDataset.getColumnIndex(graph[ii]) >= 0 &&
-                                        categoryDataset.getRowIndex(categories[jj]) >= 0;
+                                            categoryDataset.getRowIndex(categories[jj]) >= 0;
     
                     // Si la clé n'existe pas, ajouter 0
                     if (!keyExists)  
@@ -270,7 +270,7 @@ public class Graphic
                 {
                     // Vérifier si la clé existe déjà avant d'appeler getValue()
                     boolean keyExists = categoryDataset1.getColumnIndex(graph[ii]) >= 0 &&
-                    categoryDataset1.getRowIndex(categories[jj]) >= 0;
+                                            categoryDataset1.getRowIndex(categories[jj]) >= 0;
     
                     // Si la clé n'existe pas, ajouter 0
                     if (!keyExists)  

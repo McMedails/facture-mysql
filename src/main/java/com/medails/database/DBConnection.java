@@ -6,13 +6,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
@@ -55,8 +54,8 @@ public class DBConnection
 
         try
         {
-            // Chargement du drive MySQL                                             // Chargement du driver SQLite  
-            Class.forName("com.mysql.cj.jdbc.Driver");                     // Class.forName("org.sqlite.JDBC");
+            // Chargement du drive MySQL                                  
+            Class.forName("com.mysql.cj.jdbc.Driver");                 
 
             // Etablir la connexion
             conn = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -166,27 +165,10 @@ public class DBConnection
     // Récupère les colonnes Répertoire des tableaux SQL
     public List<String> getDirPDF(String tableName, String columnName)
     {
-        // Validation des paramètres
-        Map<String, List<String>> validColumns = new HashMap<>();
-        validColumns.put("facture", Arrays.asList("RepFacture", "RepDecla", 
-                                                            "NameFacture", "NameDecla"));
-        validColumns.put("deduction", Arrays.asList("RepDeduction", "NameDeduction"));
-
-        if (!validColumns.containsKey(tableName))
-        {
-            throw new IllegalArgumentException("Table invalide : " + tableName);
-        }
-
-        if (!validColumns.get(tableName).contains(columnName))
-        {
-            throw new IllegalArgumentException(String.format
-                ("Colonne invalide pour la table %s: %s", tableName, columnName));
-        }
-
         List<String> values = new ArrayList<>();
-
-        String query = String.format
-            ("SELECT DISTINCT %s FROM %s WHERE %s IS NOT NULL", columnName, tableName, columnName);
+        
+        String query = String.format("SELECT DISTINCT %s FROM %s WHERE %s IS NOT NULL",
+                                                             columnName, tableName, columnName);
 
         try (Connection conn = connect();
                 PreparedStatement pstmt = conn.prepareStatement(query);
@@ -195,20 +177,35 @@ public class DBConnection
             while (rs.next())
             {
                 String value = rs.getString(1);
+
                 if (value != null && !value.trim().isEmpty())
                 {
-                    values.add(value);
+                    values.add(value.trim());
                 }
             }
-            
+
             Collections.sort(values);
+
+            if (columnName.equals("NameFacture") || 
+                    columnName.equals("NameDecla") || 
+                        columnName.equals("NameDeduction"))
+            {
+                List<String> num = new ArrayList<>();
+                for (int ii = 0; ii < values.size(); ii++)
+                {
+                    num.add((ii + 1) + "-  " + values.get(ii));
+                }
+
+                return num;
+            }
         }
         catch (SQLException e)
         {
             e.printStackTrace();
             System.err.printf("Erreur lors de la récupération de %s.%s; %s%n", 
-                                                tableName, columnName, e.getMessage());
+                                                    tableName, columnName, e.getMessage());
         }
+
         return values;
     }
         
@@ -229,25 +226,25 @@ public class DBConnection
                                            "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = connect();
-                PreparedStatement psntmt = conn.prepareStatement(query))
+                PreparedStatement pstmt = conn.prepareStatement(query))
         {
-            psntmt.setInt       	(1,  (Integer)       factureData.get("FactureAnnee"));
-            psntmt.setString    	(2,  (String)        factureData.get("FactureMois"));
-            psntmt.setInt       	(3,  (Integer)       factureData.get("VersementAnnee"));  
-            psntmt.setString    	(4,  (String)        factureData.get("VersementMois"));
-            psntmt.setInt       	(5,  (Integer)       factureData.get("VersementJour"));
-            psntmt.setDouble    	(6,  (Double)        factureData.get("Jours"));
-            psntmt.setDouble    	(7,  (Double)        factureData.get("TJM"));
-            psntmt.setDouble    	(8,  (Double)        factureData.get("TTC"));
-            psntmt.setDouble    	(9,  (Double)        factureData.get("HT"));
-            psntmt.setDouble    	(10, (Double)        factureData.get("TVA"));
-            psntmt.setDouble    	(11, (Double)        factureData.get("Taxes"));
-            psntmt.setDouble    	(12, (Double)        factureData.get("Benefices"));
-            psntmt.setString    	(13, (String)		factureData.get("RepFacture")); 
-            psntmt.setString    	(14, (String)		factureData.get("RepDecla")); 
-            psntmt.setString    	(15, (String)		factureData.get("NameFacture")); 
-            psntmt.setString    	(16, (String)		factureData.get("NameDecla")); 
-            psntmt.executeUpdate	();
+            pstmt.setInt       	(1,  (Integer)       factureData.get("FactureAnnee"));
+            pstmt.setString    	(2,  (String)        factureData.get("FactureMois"));
+            pstmt.setInt       	(3,  (Integer)       factureData.get("VersementAnnee"));  
+            pstmt.setString    	(4,  (String)        factureData.get("VersementMois"));
+            pstmt.setInt       	(5,  (Integer)       factureData.get("VersementJour"));
+            pstmt.setDouble    	(6,  (Double)        factureData.get("Jours"));
+            pstmt.setDouble    	(7,  (Double)        factureData.get("TJM"));
+            pstmt.setDouble    	(8,  (Double)        factureData.get("TTC"));
+            pstmt.setDouble    	(9,  (Double)        factureData.get("HT"));
+            pstmt.setDouble    	(10, (Double)        factureData.get("TVA"));
+            pstmt.setDouble    	(11, (Double)        factureData.get("Taxes"));
+            pstmt.setDouble    	(12, (Double)        factureData.get("Benefices"));
+            pstmt.setString    	(13, (String)		factureData.get("RepFacture")); 
+            pstmt.setString    	(14, (String)		factureData.get("RepDecla")); 
+            pstmt.setString    	(15, (String)		factureData.get("NameFacture")); 
+            pstmt.setString    	(16, (String)		factureData.get("NameDecla")); 
+            pstmt.executeUpdate	();
         }
         catch (SQLException e)
         {
@@ -265,17 +262,17 @@ public class DBConnection
                                 "(?, ?, ?, ?, ?, ?, ?, ?)";
         
         try (Connection conn = connect();
-                PreparedStatement psntmt = conn.prepareStatement(query))
+                PreparedStatement pstmt = conn.prepareStatement(query))
         {
-            psntmt.setInt       	(1, (Integer)       deductionData.get("DeductionAnnee"));
-            psntmt.setString    	(2, (String)        deductionData.get("DeductionMois"));
-            psntmt.setInt       	(3, (Integer)       deductionData.get("DeductionJour"));
-            psntmt.setDouble    	(4, (Double)        deductionData.get("TTC"));
-            psntmt.setDouble    	(5, (Double)        deductionData.get("HT"));
-            psntmt.setDouble    	(6, (Double)        deductionData.get("TVA"));
-            psntmt.setString    	(7, (String)	       deductionData.get("RepDeduction")); 
-            psntmt.setString    	(8, (String)	       deductionData.get("NameDeduction")); 
-            psntmt.executeUpdate();
+            pstmt.setInt       	(1, (Integer)       deductionData.get("DeductionAnnee"));
+            pstmt.setString    	(2, (String)        deductionData.get("DeductionMois"));
+            pstmt.setInt       	(3, (Integer)       deductionData.get("DeductionJour"));
+            pstmt.setDouble    	(4, (Double)        deductionData.get("TTC"));
+            pstmt.setDouble    	(5, (Double)        deductionData.get("HT"));
+            pstmt.setDouble    	(6, (Double)        deductionData.get("TVA"));
+            pstmt.setString    	(7, (String)	       deductionData.get("RepDeduction")); 
+            pstmt.setString    	(8, (String)	       deductionData.get("NameDeduction")); 
+            pstmt.executeUpdate();
         }
         catch (SQLException e)
         {
@@ -291,18 +288,182 @@ public class DBConnection
 
     public void deleteInBDD(JComboBox box, String nameTable, String nameColumn)
     {
-        String query = "DELETE FROM " + nameTable + " WHERE " + nameColumn + " = ?";
+        // Vérification que la combox n'est pas vide
+        if (box.getSelectedItem() == null)
+        {
+            JOptionPane.showMessageDialog(dp.fen, "Veuillez sélectioner au moins un PDF à supprimer",
+                                                  "Aucune sélection", 
+                                                  JOptionPane.WARNING_MESSAGE);
+            return;          
+        }
+    
+        // Demande de confirmation
+        int confirm = JOptionPane.showConfirmDialog(dp.fen, "Etes-vous sûr de vouloir supprimer les PDF sélectionnés ?",
+                                                            "Confirmation de suppression", 
+                                                            JOptionPane.YES_NO_OPTION);
+    
+        if (confirm == JOptionPane.YES_OPTION)  
+        {     
+            // Récupération du nom réel du fichier sans le préfixe
+            String selectedItem  = box.getSelectedItem().toString();
+            String valueToDelete = selectedItem.contains("-") ? 
+                                    selectedItem.substring(selectedItem.indexOf("-") + 1).trim() : selectedItem.trim();
+
+            String query = "DELETE FROM " + nameTable + " WHERE " + nameColumn + " = ?";
+
+            try (Connection conn = connect();
+                    PreparedStatement pstmt = conn.prepareStatement(query))
+            {
+                pstmt.setString         (1, valueToDelete);
+
+                int affectedRows = pstmt.executeUpdate();
+                if (affectedRows > 0)
+                {
+                    JOptionPane.showMessageDialog(dp.fen, "Suppression des PDF sélectionnés terminée",
+                                                            "Opération réussie", 
+                                                            JOptionPane.INFORMATION_MESSAGE);
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(dp.fen, "Aucun enregistrement correspondant trouvé en base",
+                                                            "Aucune suppression", 
+                                                            JOptionPane.INFORMATION_MESSAGE);                    
+                }
+            } 
+            catch (SQLException e)                                                                                  
+            {                                          
+                e.printStackTrace();
+                throw new RuntimeException("Erreur lors de la suppression : ", e);
+            }
+        }
+    }
+
+
+    /************************************************************ 
+                       REECRITURE DANS ONGLET 1
+    *************************************************************/
+
+    // Méthode permettant la lecture avec extraction de préfixe
+    public Map<String, Object> reWriteFacture(String nameFacture)
+    {
+        Map<String, Object> result = new HashMap<>();
+        
+        String query = "SELECT * FROM facture WHERE NameFacture = ? LIMIT 1";
 
         try (Connection conn = connect();
-                PreparedStatement psntmt = conn.prepareStatement(query))
+                PreparedStatement pstmt = conn.prepareStatement(query))
         {
-            psntmt.setString    (1, box.getSelectedItem().toString());
-            psntmt.executeUpdate();
+            pstmt.setString    (1, nameFacture);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                result.put("FactureAnnee"    , rs.getInt    ("FactureAnnee"));
+                result.put("FactureMois"     , rs.getString ("FactureMois"));
+                result.put("VersementAnnee"  , rs.getInt    ("VersementAnnee"));
+                result.put("VersementMois"   , rs.getString ("VersementMois"));
+                result.put("VersementJour"   , rs.getInt    ("VersementJour"));
+                result.put("Jours"           , rs.getInt    ("Jours"));
+                result.put("TJM"             , rs.getDouble ("TJM"));
+                result.put("TTC"             , rs.getDouble ("TTC"));
+                result.put("HT"              , rs.getDouble ("HT"));
+                result.put("TVA"             , rs.getDouble ("TVA"));
+                result.put("Taxes"           , rs.getDouble ("Taxes"));
+                result.put("Benefices"       , rs.getDouble ("Benefices"));
+            }
         }
         catch (SQLException e)
         {
             e.printStackTrace();
-            throw new RuntimeException("Erreur lors de la suppression : ", e);
         }
+
+        return result;
+    }
+
+
+    /************************************************************ 
+                       REECRITURE DANS ONGLET 3
+    *************************************************************/
+
+    // Méthode permettant la lecture avec extraction de préfixe
+    public Map<String, Object> reWriteDeduction(String nameDeduction)
+    {
+        Map<String, Object> result = new HashMap<>();
+        
+        String query = "SELECT * FROM deduction WHERE NameDeduction = ? LIMIT 1";
+
+        try (Connection conn = connect();
+                PreparedStatement pstmt = conn.prepareStatement(query))
+        {
+            pstmt.setString    (1, nameDeduction);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                result.put("DeductionAnnee"   , rs.getInt    ("DeductionAnnee"));
+                result.put("DeductionMois"    , rs.getString ("DeductionMois"));
+                result.put("DeductionJour"    , rs.getInt    ("DeductionJour"));
+                result.put("TTC"              , rs.getDouble ("TTC"));
+                result.put("HT"               , rs.getDouble ("HT"));
+                result.put("TVA"              , rs.getDouble ("TVA"));
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+
+    /************************************************************ 
+                       METHODES POUR REECRITURE
+    *************************************************************/
+
+    // Méthode de controle du prefixe 
+    private String cleanPrefix(String item) 
+    {
+        return item.replaceFirst("^\\d+-", "").trim();
+    }
+
+
+    public void boxPDFListener(JComboBox<String> box, Consumer<Map<String, Object>> updateUI)
+    {
+        box.addActionListener(e -> 
+        {
+            String item = (String) box.getSelectedItem();
+
+            if (item != null && !item.isEmpty()) 
+            {
+                String cleanedName = cleanPrefix(item);
+                Map<String, Object> dataFacture = reWriteFacture(cleanedName);
+                Map<String, Object> dataDeduction = reWriteDeduction(cleanedName);
+    
+                if (dataFacture != null && !dataFacture.isEmpty())   { updateUI.accept(dataFacture);   }
+                if (dataDeduction != null && !dataDeduction.isEmpty())   { updateUI.accept(dataDeduction);   }
+            }
+        });
+    }
+
+
+    // Reconversion du format Date 
+    public int convertMonth(String mois)
+    {
+        Map<String, Integer> moisMap = Map.ofEntries
+           (Map.entry("janvier"     , 1),
+            Map.entry("février"     , 2),
+            Map.entry("mars"        , 3),
+            Map.entry("avril"       , 4),
+            Map.entry("mai"         , 5),
+            Map.entry("juin"        , 6),
+            Map.entry("juillet"     , 7),
+            Map.entry("août"        , 8),
+            Map.entry("septembre"   , 9),
+            Map.entry("octobre"     , 10),
+            Map.entry("novembre"    , 11),
+            Map.entry("décembre"    , 12));
+
+        return moisMap.getOrDefault(mois, 1);
     }
 }               

@@ -4,6 +4,8 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -81,15 +83,34 @@ public class Treatment1
         dp.butSearchFacture        .addActionListener (e -> searchDirectory(dp.boxRep1, dp.boxPDF1, DIRECTORY_FACTURE));
         dp.butSearchDecla          .addActionListener (e -> searchDirectory(dp.boxRep2, dp.boxPDF2, DIRECTORY_DECLA));
         dp.butSave                 .addActionListener (e -> saveDataListener());  
-        dp.butDelete               .addActionListener (e -> { deletePDF(dp.boxPDF1, "facture", "NameFacture");
-                                                              deletePDF(dp.boxPDF2, "facture", "NameDecla");});                                  
-        							popupListener     (dp.boxRep1, dp.boxPDF1, 
-                                                        "facture", "RepFacture",
-                                                        "facture", "NameFacture");
-                                    popupListener     (dp.boxRep2, dp.boxPDF2, 
-                                                        "facture", "RepDecla",
-                                                        "facture", "NameDecla");
+        dp.butDelete               .addActionListener (e -> db.deleteInBDD(dp.boxPDF1, "facture", "NameFacture"));                                 
+        							popupListener     (dp.boxRep1, dp.boxPDF1, "facture", "RepFacture",
+                                                                                "facture", "NameFacture");
+                                    popupListener     (dp.boxRep2, dp.boxPDF2, "facture", "RepDecla",
+                                                                                "facture", "NameDecla");
         dp.butReset1               .addActionListener (e -> clearListener());
+
+
+        // Solution Lambda pour mettre à jour les champs
+        db.boxPDFListener(dp.boxPDF1, data -> 
+        {
+            dp.boxYears.setSelectedItem(data.get("FactureAnnee") + "");
+            dp.boxMonths.setSelectedItem((String) data.get("FactureMois"));
+
+            int     annee  = (int)     data.get("VersementAnnee");
+            String  mois   = (String)  data.get("VersementMois");
+            int     jour   = (int)     data.get("VersementJour");
+            dp.datePay.setDate(Date.from(LocalDate.of(annee, db.convertMonth(mois), jour)
+                                        .atStartOfDay(ZoneId.systemDefault()).toInstant()));
+
+            dp.txtDays.setText      (data.get("Jours")      .toString());
+            dp.txtTJM.setText       (data.get("TJM")        .toString());
+            dp.txtTTC.setText       (data.get("TTC")        .toString());
+            dp.txtHT.setText        (data.get("HT")         .toString());
+            dp.txtTVA.setText       (data.get("TVA")        .toString());
+            dp.txtTaxe.setText      (data.get("Taxes")      .toString());
+            dp.txtBenefit.setText   (data.get("Benefices")  .toString());   
+        });
     }
 
     /*********************************************************** 
@@ -205,17 +226,14 @@ public class Treatment1
             return;
         }
 
-        File file = new File(selectedRep + "/" + selectedPDF);
+        // Nettoyage du nom de fichier pour supprimer le préfixe numérique
+        String cleanedPDFName = cleanPDFName(selectedPDF);
+        File file = new File(selectedRep + File.separator + cleanedPDFName);
+
         try
         {
-            if (file.exists())
-            {
-                Desktop.getDesktop().open(file);
-            }
-            else
-            {
-                throw new IOException("Fichier introuvable");
-            }
+            if (file.exists())  {   Desktop.getDesktop().open(file);    }
+            else {   throw new IOException("Fichier introuvable");   }
         }
         catch (IOException ex)
         {
@@ -223,6 +241,12 @@ public class Treatment1
                                             "Erreur", 
                                             JOptionPane.WARNING_MESSAGE);
         }
+    }
+    
+    // Méthode pour nettoyer le nom du PDF en supprimant le préfixe numérique
+    private String cleanPDFName(String pdfEntry) 
+    {
+        return pdfEntry.replaceFirst("^\\d+\\s*-\\s*", "");
     }
     
 
@@ -288,33 +312,6 @@ public class Treatment1
         comboBox.setSelectedIndex(-1);
     }
     
-
-    // K1 -> Suppression des lignes dans la BDD
-    public void deletePDF(JComboBox box, String nameTable, String nameColumn)
-    {
-        // Vérification que la combox n'est pas vide
-        if (box.getSelectedItem() == null)
-        {
-            JOptionPane.showMessageDialog(dp.fen, "Veuillez sélectioner au moins un PDF à supprimer",
-                                                  "Aucune sélection", 
-                                                  JOptionPane.WARNING_MESSAGE);
-            return;          
-        }
-
-        // Demande de confirmation
-        int confirm = JOptionPane.showConfirmDialog(dp.fen, "Etes-vous sûr de vouloir supprimer les PDF sélectionnés ?",
-                                                            "Confirmation de suppression", 
-                                                            JOptionPane.YES_NO_OPTION);
-
-        if (confirm != JOptionPane.YES_OPTION)  {   return;   }
-
-        // Supprimer les PDF sélectionnés un par un
-        db.deleteInBDD(box, nameTable, nameColumn);
-        JOptionPane.showMessageDialog(dp.fen, "Suppression des PDF sélectionnés terminée",
-                                              "Opération réussie", 
-                                              JOptionPane.INFORMATION_MESSAGE);
-    }
-
 
     // K2 -> Enrengistrer
     public void saveDataListener()
