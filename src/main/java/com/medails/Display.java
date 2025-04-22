@@ -88,32 +88,31 @@ public class Display
     public final int MINRANGE_YEARMONTHPAN2  = 10000;     public final int MAXRANGE_YEARMONTHPAN2  = 20000; 
     public JSlider               sliDecadePan2;          { sliDecadePan2        = new JSlider           (JSlider.HORIZONTAL, MINRANGE_DECADEPAN2, MAXRANGE_DECADEPAN2, MINRANGE_DECADEPAN2);}   
     public JSlider               sliYearMonthPan2;       { sliYearMonthPan2     = new JSlider           (JSlider.HORIZONTAL, MINRANGE_YEARMONTHPAN2, MAXRANGE_YEARMONTHPAN2, MINRANGE_YEARMONTHPAN2);}  
-    public JToggleButton         togTotal;               { togTotal             = new JToggleButton     ();}                                //    - Déduction TVA           
-    public JCheckBox             cckTTCPan2;             { cckTTCPan2           = new JCheckBox         ("", true);}    		// A1 - TTC
-    public JCheckBox             cckTVAPan2;             { cckTVAPan2           = new JCheckBox         ("", true);}    		// A2 - TVA
-    public JCheckBox             cckHTPan2;              { cckHTPan2            = new JCheckBox         ("", true);}    		// A3 - HT
-    public JCheckBox             cckTaxePan2  ;          { cckTaxePan2          = new JCheckBox         ("", true);}    		// A4 - Urssaf
-    public JCheckBox             cckBenefitPan2;         { cckBenefitPan2       = new JCheckBox         ("", true);}    		// A5 - Bénéfices
-    public JComboBox<String>     boxYearsTotal;          { boxYearsTotal        = new JComboBox<String> ();}                                // B1 - Années
+    public JToggleButton         togTotal;               { togTotal             = new JToggleButton     ();}                                // A1   - Déduction TVA 
+    public JComboBox<String>     boxYearsTotal;          { boxYearsTotal        = new JComboBox<String> ();}                                // A2 - Années          
+    public JCheckBox             cckTTCPan2;             { cckTTCPan2           = new JCheckBox         ("", true);}    		// B1 - TTC
+    public JCheckBox             cckTVAPan2;             { cckTVAPan2           = new JCheckBox         ("", true);}    		// B2 - TVA
+    public JCheckBox             cckHTPan2;              { cckHTPan2            = new JCheckBox         ("", true);}    		// B3 - HT
+    public JCheckBox             cckTaxePan2  ;          { cckTaxePan2          = new JCheckBox         ("", true);}    		// B4 - Urssaf
+    public JCheckBox             cckBenefitPan2;         { cckBenefitPan2       = new JCheckBox         ("", true);}    		// B5 - Bénéfices
 
     /*********** Onglet 3 ***************/ 
     public final int MINRANGE_DECADEPAN3     = 10000;     public final int MAXRANGE_DECADEPAN3     = 25000;
     public final int MINRANGE_YEARMONTHPAN3  = 5000;      public final int MAXRANGE_YEARMONTHPAN3  = 10000; 
     public JSlider               sliDecadePan3;          { sliDecadePan3        = new JSlider           (JSlider.HORIZONTAL, MINRANGE_DECADEPAN3, MAXRANGE_DECADEPAN3, MINRANGE_DECADEPAN3);}   
     public JSlider               sliYearMonthPan3;       { sliYearMonthPan3     = new JSlider           (JSlider.HORIZONTAL, MINRANGE_YEARMONTHPAN3, MAXRANGE_YEARMONTHPAN3, MINRANGE_YEARMONTHPAN3);}                    
-    public JDateChooser          dateDeduction;          { dateDeduction        = new JDateChooser      ();}                                // A1 - Date de paiement 
     public JComboBox<String>     boxYearsDeduction;      { boxYearsDeduction    = new JComboBox<String> ();}                                // A2 - Déduction
-    public JTextField            txtTTCPan3;             { txtTTCPan3           = new JTextField        ();}                                // B1 - Résultat TTC
-    public JTextField            txtHTPan3;              { txtHTPan3            = new JTextField        ();}                                // B2 - Résultat HT 
-    public JTextField            txtTVAPan3;             { txtTVAPan3           = new JTextField        ();}                                // B3 - Résultat TVA
-    public JButton               butOpenDeduction;       { butOpenDeduction     = new JButton           ("Ouvrir");}                   // C1 - Ouvrir Déduction
-    public JButton               butSearchDeduction;     { butSearchDeduction   = new JButton           ("Parcourir");}                // C2 - Parcourir Déduction
-    public JComboBox<String>     boxRepDeduction;        { boxRepDeduction      = new JComboBox<String> ();}                                // D1 - Barre de recherche Déduction (Réperoitre)
-    public JComboBox<String>     boxPDFDeduction;        { boxPDFDeduction      = new JComboBox<String> ();}                                // E1 - Barre de recherche Déduction (Nom du PDF)
-    public JButton				 butDeleteDeduction;     { butDeleteDeduction   = new JButton		    ("Supprimer");}			    // F1 - Supprimer
-    public JButton               butSaveDeduction;       { butSaveDeduction     = new JButton           ("Enregistrer");}              // F2 - Enregistrer
-    public JButton               butReset3;              { butReset3            = new JButton           ("RAZ");}                      // F3 - RAZ
-
+    public JDateChooser          dateDeduction;          { dateDeduction        = new JDateChooser      ();}                                // B1 - Date de paiement 
+    public JTextField            txtTTCPan3;             { txtTTCPan3           = new JTextField        ();}                                // C1 - Résultat TTC
+    public JTextField            txtHTPan3;              { txtHTPan3            = new JTextField        ();}                                // C2 - Résultat HT 
+    public JTextField            txtTVAPan3;             { txtTVAPan3           = new JTextField        ();}                                // C3 - Résultat TVA
+    public JButton               butOpenDeduction;       { butOpenDeduction     = new JButton           ("Ouvrir");}                   // D1 - Ouvrir Déduction
+    public JButton               butSearchDeduction;     { butSearchDeduction   = new JButton           ("Parcourir");}                // D2 - Parcourir Déduction
+    public JComboBox<String>     boxRepDeduction;        { boxRepDeduction      = new JComboBox<String> ();}                                // E1 - Barre de recherche Déduction (Réperoitre)
+    public JComboBox<String>     boxPDFDeduction;        { boxPDFDeduction      = new JComboBox<String> ();}                                // F1 - Barre de recherche Déduction (Nom du PDF)
+    public JButton				 butDeleteDeduction;     { butDeleteDeduction   = new JButton		    ("Supprimer");}			    // G1 - Supprimer
+    public JButton               butSaveDeduction;       { butSaveDeduction     = new JButton           ("Enregistrer");}              // G2 - Enregistrer
+    public JButton               butReset3;              { butReset3            = new JButton           ("RAZ");}                      // G3 - RAZ
 
     // Année et mois
     private String years[] = {"", "2024", "2025", "2026", "2027", "2028"};
@@ -167,7 +166,7 @@ public class Display
 
         // Placement des composants
         gbc = new GridBagConstraints();
-        gbc.insets = new Insets(0, 10, 10, 10);
+        gbc.insets = new Insets(0, 0, 10, 0);
 
         // Fermeture de la fenetre
         fen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -302,20 +301,19 @@ public class Display
         addComposant(pan1, labLienFacture, 0, 22, 1);
         
         // E1 - Ouvrir facture
-        gbc.insets = new Insets(0, 65, 10, 10);
+        gbc.insets = new Insets(0, 65, 10, 0);
         addComposant(pan1, butOpenFacture, 1, 22, 1);
     
         // E2 - Parcourir facture
-        gbc.insets = new Insets(0, 10, 10, 10);
+        gbc.insets = new Insets(0, 0, 10, 0);
         addComposant(pan1, butSearchFacture, 2, 22, 1);
         
         // F1 - Barre de recherche Facture (Réperoitre)
-        gbc.insets = new Insets(0, 10, 10, 10);
-        boxRep1 = createJComboBox(300, 18);
+        boxRep1 = createJComboBox(330, 18);
         addComposant(pan1, boxRep1, 0, 24, 3);
         
         // G1 - Barre de recherche Facture (Nom du PDF)   
-        boxPDF1 = createJComboBox(300, 18);
+        boxPDF1 = createJComboBox(330, 18);
         addComposant(pan1, boxPDF1, 0, 26, 3);
   
         // Liens vers déclaration
@@ -323,20 +321,20 @@ public class Display
         addComposant(pan1, labLienDecla, 0, 28, 1);
 
         // H1 - Ouvrir déclaration
-        gbc.insets = new Insets(0, 65, 10, 10);
+        gbc.insets = new Insets(0, 65, 10, 0);
         addComposant(pan1, butOpenDecla, 1, 28, 1);
         
         // H2 - Parcourir déclaration
-        gbc.insets = new Insets(0, 10, 10, 10);
+        gbc.insets = new Insets(0, 0, 10, 0);
         addComposant(pan1, butSearchDecla, 2, 28, 1);
         
         // I1 - Barre de recherche Déclaration (Réperoitre)
-        gbc.insets = new Insets(0, 10, 10, 10);
-        boxRep2 = createJComboBox(300, 18);
+        gbc.insets = new Insets(0, 0, 10, 0);
+        boxRep2 = createJComboBox(330, 18);
         addComposant(pan1, boxRep2, 0, 30, 3);
         
         // J1 - Barre de recherche Déclaration (Nom du PDF)
-        boxPDF2 = createJComboBox( 300, 18);
+        boxPDF2 = createJComboBox( 330, 18);
         addComposant(pan1, boxPDF2, 0, 32, 3);
 
         // /************************ Boutons ************************/
@@ -345,11 +343,11 @@ public class Display
         addComposant(pan1, butDelete, 0, 34, 2);
         
         // K2 - Enregistrer
-        gbc.insets = new Insets(0, 0, 10, 75);
+        gbc.insets = new Insets(0, 0, 10, 55);
         addComposant(pan1, butSave, 1, 34, 2);
 
         // K3 - RAZ
-        gbc.insets = new Insets(0, 0, 10, 10);
+        gbc.insets = new Insets(0, 0, 10, 0);
         addComposant(pan1, butReset1, 2, 34, 2);
     }
 
@@ -362,7 +360,7 @@ public class Display
         /************************* Facture **************************/
 
         // XX - Slide
-        gbc.insets = new Insets(0, 10, 10, 10);
+        gbc.insets = new Insets(10, 0, 10, 0);
         JLabel labSliDecadePan2 = new JLabel("Décénie : ");
         JLabel labSliYearMonthPan2 = new JLabel("Annuel/Mensuel : ");
         addComposant(pan2, labSliDecadePan2, 0, 0, 1);
@@ -370,49 +368,49 @@ public class Display
         addComposant(pan2, sliDecadePan2, 1, 0, 4); 
         addComposant(pan2, sliYearMonthPan2, 1, 1, 4); 
 
-        // Déduction TVA
-        gbc.insets = new Insets(400, 10, 0, 30);
-        addComposant(pan2, togTotal, 4, 2, 1);  
+        // A1 Déduction TVA
+        gbc.insets = new Insets(400, 85, 0, 0);
+        addComposant(pan2, togTotal, 2, 2, 2);  
 
-        // A1 - TTC
-        gbc.insets = new Insets(0, 0, 10, 10);
+        // A2 - Années
+        gbc.insets = new Insets(400, 30, 0, 0);
+        boxYearsTotal = createJComboBox(60, 18, years);
+        addComposant(pan2, boxYearsTotal, 4, 2, 2);
+
+        // B1 - TTC
+        gbc.insets = new Insets(0, 0, 10, 0);
         JLabel labcckTTCPan2 = new JLabel("TTC");
         cckTTCPan2.setBackground(Color.LIGHT_GRAY);
         addComposant(pan2, labcckTTCPan2, 0, 4, 1);
         addComposant(pan2, cckTTCPan2, 0, 6, 1);
 
-        // A2 - TVA
+        // B2 - TVA
         gbc.insets = new Insets(0, 0, 10, 15);
         JLabel labcckTVAPan2 = new JLabel("TVA");
         cckTVAPan2.setBackground(Color.LIGHT_GRAY);
         addComposant(pan2, labcckTVAPan2, 1, 4, 1);
         addComposant(pan2, cckTVAPan2, 1, 6, 1);
 
-        // A3 - HT
+        // B3 - HT
         gbc.insets = new Insets(0, 0, 10, 20);
         JLabel labcckHTPan2 = new JLabel("HT");
         cckHTPan2.setBackground(Color.LIGHT_GRAY);
         addComposant(pan2, labcckHTPan2, 2, 4, 1);
         addComposant(pan2, cckHTPan2, 2, 6, 1);
 
-        // A4 - URSSAF
+        // B4 - URSSAF
         gbc.insets = new Insets(0, 0, 10, 25);
         JLabel labcckTaxePan2 = new JLabel("URSSAF");
         cckTaxePan2.setBackground(Color.LIGHT_GRAY);
         addComposant(pan2, labcckTaxePan2, 3, 4, 1);
         addComposant(pan2, cckTaxePan2, 3, 6, 1);
 
-        // A5 - Bénéfices
+        // B5 - Bénéfices
         gbc.insets = new Insets(0, 0, 10, 30);
         JLabel labcckBenefitPan2 = new JLabel("Bénéfices");
         cckBenefitPan2.setBackground(Color.LIGHT_GRAY);
         addComposant(pan2, labcckBenefitPan2, 4, 4, 1);
         addComposant(pan2, cckBenefitPan2, 4, 6, 1);
-            
-        // B1 - Années
-        gbc.insets = new Insets(0, 0, 10, 20);
-        boxYearsTotal = createJComboBox(60, 18, years);
-        addComposant(pan2, boxYearsTotal, 4, 8, 1);
     }
 
     /*********************************************************** 
@@ -424,7 +422,7 @@ public class Display
         /********************** Déduction ***********************/
     
         // XX - Slide
-        gbc.insets = new Insets(0, 10, 10, 10);
+        gbc.insets = new Insets(10, 0, 10, 0);
         JLabel labSliDecadePan3 = new JLabel("Décénie : ");
         JLabel labSliYearMonthPan3 = new JLabel("Annuel/Mensuel : ");
         addComposant(pan3, labSliDecadePan3, 0, 0, 1);
@@ -432,31 +430,32 @@ public class Display
         addComposant(pan3, sliDecadePan3, 1, 0, 3); 
         addComposant(pan3, sliYearMonthPan3, 1, 1, 3); 
 
-        // A1 - Date de paiement
+        // A1 - Années
+        gbc.insets = new Insets(400, 30, 0, 0);
+        boxYearsDeduction = createJComboBox(60, 18, years);
+        addComposant(pan3, boxYearsDeduction, 2, 4, 1); 
+
+        // B1 - Date de paiement
+        gbc.insets = new Insets(0, 0, 10, 0);
         JLabel labDateDeduction = new JLabel("Date d'achat");
         dateDeduction.setPreferredSize(new Dimension(100, 18));
         addComposant(pan3, labDateDeduction, 0, 6, 1);
         addComposant(pan3, dateDeduction, 0, 8, 1);
 
-        // A2 - Années
-        JLabel labYearsDeduction = new JLabel("Année");
-        boxYearsDeduction = createJComboBox(60, 18, years);
-        addComposant(pan3, labYearsDeduction, 2, 6, 1);
-        addComposant(pan3, boxYearsDeduction, 2, 8, 1);    
-     
-        // B1 - TTC
+        // C1 - TTC
+        gbc.insets = new Insets(0, 0, 10, 0);
         JLabel labTTCPan3 = new JLabel("TTC");
         txtTTCPan3 = createTextField(60, 18); 
         addComposant(pan3, labTTCPan3, 0, 10, 1);
         addComposant(pan3, txtTTCPan3, 0, 12, 1);
 
-        // B2 - HT
+        // C2 - HT
         JLabel labHTPan3 = new JLabel("HT");
         txtHTPan3 = createTextField(60, 18); 
         addComposant(pan3, labHTPan3, 1, 10, 1);
         addComposant(pan3, txtHTPan3, 1, 12, 1);
 
-        // B3 - TVA
+        // C3 - TVA
         JLabel labTVAPan3 = new JLabel("TVA");
         txtTVAPan3 = createTextField(60, 18); 
         addComposant(pan3, labTVAPan3, 2, 10, 1);
@@ -466,34 +465,33 @@ public class Display
         labDeduction.setFont(styleFont2);
         addComposant(pan3, labDeduction, 0, 14, 1);
 
-        // C1 - Ouvrir Déduction
+        // D1 - Ouvrir Déduction
         gbc.insets = new Insets(0, 65, 10, 10);
         addComposant(pan3, butOpenDeduction, 1, 16, 1);
 
-        // C2 - Parcourir Déduction
-        gbc.insets = new Insets(0, 10, 10, 10);
+        // D2 - Parcourir Déduction
+        gbc.insets = new Insets(0, 0, 10, 0);
         addComposant(pan3, butSearchDeduction, 2, 16, 1);
 
-        // D1 - Barre de recherche Déduction (Réperoitre)
-        gbc.insets = new Insets(0, 10, 10, 10);
-        boxRepDeduction = createJComboBox(300, 18);
+        // E1 - Barre de recherche Déduction (Réperoitre)
+        boxRepDeduction = createJComboBox(330, 18);
         addComposant(pan3, boxRepDeduction, 0, 18, 3);
 
-        // E1 - Barre de recherche Déduction (Nom du PDF)
-        boxPDFDeduction = createJComboBox(300, 18);
+        // F1 - Barre de recherche Déduction (Nom du PDF)
+        boxPDFDeduction = createJComboBox(330, 18);
         addComposant(pan3, boxPDFDeduction, 0, 20, 3);
     
         // /************************ Boutons ************************/
-        // F1 - Supprimer
+        // G1 - Supprimer
         gbc.insets = new Insets(0, 0, 10, 90);
         addComposant(pan3, butDeleteDeduction, 0, 22, 2);
         
-        // F2 - Enregistrer
+        // G2 - Enregistrer
         gbc.insets = new Insets(0, 0, 10, 75);
         addComposant(pan3, butSaveDeduction, 1, 22, 2);
 
-        // F3 - RAZ
-        gbc.insets = new Insets(0, 0, 10, 10);
+        // G3 - RAZ
+        gbc.insets = new Insets(0, 0, 10, 0);
         addComposant(pan3, butReset3, 2, 22, 2);
     }
 }

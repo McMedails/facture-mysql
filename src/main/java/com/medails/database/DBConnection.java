@@ -132,7 +132,7 @@ public class DBConnection
         List<Map<String, Object>> deductionList = new ArrayList<>();
 
         String query = "SELECT DeductionAnnee, DeductionMois, DeductionJour," +
-        			   "TTC, HT, TVA, RepDeduction, NameDeduction FROM deduction";
+        			    "TTC, HT, TVA, RepDeduction, NameDeduction FROM deduction";
 
         try (Connection conn = connect();
                 PreparedStatement pstmt = conn.prepareStatement(query);

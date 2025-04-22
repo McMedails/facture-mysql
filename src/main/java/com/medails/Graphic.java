@@ -45,10 +45,9 @@ public class Graphic
         chartYearsPan3  = createChart(dataYearsPan3,  dp.MINRANGE_YEARMONTHPAN3);
         chartMonthsPan3 = createChart(dataMonthsPan3, dp.MINRANGE_YEARMONTHPAN3);
 
-        createGraphic(chartDecadePan3, WIDTH_GRAPHIC, HEIGHT_GRAPHIC, dp.tabDeduction, "Décénie", dp.pan3, 0, 4, 3);
-        createGraphic(chartYearsPan3,  WIDTH_GRAPHIC, HEIGHT_GRAPHIC, dp.tabDeduction, "Annuel",  dp.pan3, 0, 4, 3);
-        createGraphic(chartMonthsPan3, WIDTH_GRAPHIC, HEIGHT_GRAPHIC, dp.tabDeduction, "Mensuel", dp.pan3, 0, 4, 3);
-
+        createGraphic(chartDecadePan3, WIDTH_GRAPHIC, HEIGHT_GRAPHIC, dp.tabDeduction, "Décénie", dp.pan3, 0, 4, 4);
+        createGraphic(chartYearsPan3,  WIDTH_GRAPHIC, HEIGHT_GRAPHIC, dp.tabDeduction, "Annuel",  dp.pan3, 0, 4, 4);
+        createGraphic(chartMonthsPan3, WIDTH_GRAPHIC, HEIGHT_GRAPHIC, dp.tabDeduction, "Mensuel", dp.pan3, 0, 4, 4);
     }
 
     
