@@ -63,7 +63,6 @@ public class Treatment2
         dp.cckHTPan2               .addActionListener (e -> graphYearMonth());
         dp.cckTaxePan2             .addActionListener (e -> graphYearMonth());
         dp.cckBenefitPan2          .addActionListener (e -> graphYearMonth());
-        dp.butReset2               .addActionListener (e -> clearListener());
     }
 
     /*********************************************************** 
@@ -125,7 +124,8 @@ public class Treatment2
             graphTaxe     +=  currentTaxe;   
             graphBenefit  +=  currentBenefit;
 
-            /************************* GRAPHIQUE **************************/                     
+            /************************* GRAPHIQUE **************************/  
+                               
             // Trouve le mois correspondant et stocke la valeur dans le tableau
             for (int kk = 0; kk < gr.GRAPHYEARS.length; kk++)
             {
@@ -265,15 +265,4 @@ public class Treatment2
     public boolean filterGraph(JCheckBox checkBox)
     { return checkBox.isSelected(); }
 
-
-    // D3 -> RAZ
-    public void clearListener()
-    {
-        /* B1 */ dp.boxYearsTotal.setSelectedItem("");
-        /* C1 */ dp.txtTotalTTC.setText("");
-        /* C2 */ dp.txtTotalHT.setText("");  
-        /* C3 */ dp.txtTotalTVA.setText("");
-        /* D1 */ dp.txtTotalTaxe.setText("");
-        /* D2 */ dp.txtTotalBenefit.setText("");    
-    }
 }
