@@ -79,7 +79,7 @@ public class DBConnection
                                 READ
     *************************************************************/
 
-    /****************** List<Map<String, Object> ****************/
+    /****************** Onglet 1 ****************/
  
     // Récupère les données du tableau "facture"
     public List<Map<String, Object>> getFacture()
@@ -125,7 +125,47 @@ public class DBConnection
         return factureList;
     }
 
-   
+
+    // Méthode permettant la lecture avec extraction de préfixe du tableau "facture"
+    public Map<String, Object> reGetFacture(String nameFacture)
+    {
+        Map<String, Object> result = new HashMap<>();
+        
+        String query = "SELECT * FROM facture WHERE NameFacture = ? LIMIT 1";
+
+        try (Connection conn = connect();
+                PreparedStatement pstmt = conn.prepareStatement(query))
+        {
+            pstmt.setString    (1, nameFacture);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                result.put("FactureAnnee"    , rs.getInt    ("FactureAnnee"));
+                result.put("FactureMois"     , rs.getString ("FactureMois"));
+                result.put("VersementAnnee"  , rs.getInt    ("VersementAnnee"));
+                result.put("VersementMois"   , rs.getString ("VersementMois"));
+                result.put("VersementJour"   , rs.getInt    ("VersementJour"));
+                result.put("Jours"           , rs.getInt    ("Jours"));
+                result.put("TJM"             , rs.getDouble ("TJM"));
+                result.put("TTC"             , rs.getDouble ("TTC"));
+                result.put("HT"              , rs.getDouble ("HT"));
+                result.put("TVA"             , rs.getDouble ("TVA"));
+                result.put("Taxes"           , rs.getDouble ("Taxes"));
+                result.put("Benefices"       , rs.getDouble ("Benefices"));
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    
+    /****************** Onglet 3 ****************/
+
     // Récupère les données du tableau "deduction"
     public List<Map<String, Object>> getDeduction()
     {
@@ -160,9 +200,111 @@ public class DBConnection
     }
     
 
-    /******************** List<String, Object> ******************/
+    // Méthode permettant la lecture avec extraction de préfixe
+    public Map<String, Object> reGetDeduction(String nameDeduction)
+    {
+        Map<String, Object> result = new HashMap<>();
+        
+        String query = "SELECT * FROM deduction WHERE NameDeduction = ? LIMIT 1";
 
-    // Récupère les colonnes Répertoire des tableaux SQL
+        try (Connection conn = connect();
+                PreparedStatement pstmt = conn.prepareStatement(query))
+        {
+            pstmt.setString    (1, nameDeduction);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                result.put("DeductionAnnee"   , rs.getInt    ("DeductionAnnee"));
+                result.put("DeductionMois"    , rs.getString ("DeductionMois"));
+                result.put("DeductionJour"    , rs.getInt    ("DeductionJour"));
+                result.put("TTC"              , rs.getDouble ("TTC"));
+                result.put("HT"               , rs.getDouble ("HT"));
+                result.put("TVA"              , rs.getDouble ("TVA"));
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    /****************** Onglet 4 ****************/
+
+    // Récupère les données du tableau "deduction"
+    public List<Map<String, Object>> getChomage()
+    {
+        List<Map<String, Object>> chomageList = new ArrayList<>();
+
+        String query = "SELECT ChomageAnnee, ChomageMois, ChomageJour, MoisActualisation, " +
+        			    "JoursParMois, Coefficient, Montant, RepChomage, NameChomage FROM chomage";
+
+        try (Connection conn = connect();
+                PreparedStatement pstmt = conn.prepareStatement(query);
+                    ResultSet rs = pstmt.executeQuery())
+        {
+            while (rs.next())
+            {
+                Map<String, Object> row = new HashMap<>();
+                row.put("ChomageAnnee"         , rs.getInt       ("ChomageAnnee"));
+                row.put("ChomageMois"          , rs.getString    ("ChomageMois"));
+                row.put("ChomageJour"          , rs.getInt       ("ChomageJour"));
+                row.put("MoisActualisation"    , rs.getString    ("MoisActualisation"));
+                row.put("JoursParMois"	       , rs.getInt       ("JoursParMois"));
+                row.put("Coefficient"	       , rs.getDouble    ("Coefficient"));
+                row.put("Montant"		       , rs.getDouble    ("Montant"));
+                row.put("RepChomage"           , rs.getString    ("RepChomage"));
+                row.put("NameChomage"	       , rs.getString    ("NameChomage")); 
+                chomageList.add(row);
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return chomageList;
+    }
+    
+
+    // Méthode permettant la lecture avec extraction de préfixe
+    public Map<String, Object> reGetChomage(String nameChomage)
+    {
+        Map<String, Object> result = new HashMap<>();
+        
+        String query = "SELECT * FROM chomage WHERE NameChomage = ? LIMIT 1";
+
+        try (Connection conn = connect();
+                PreparedStatement pstmt = conn.prepareStatement(query))
+        {
+            pstmt.setString    (1, nameChomage);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                result.put("ChomageAnnee"         , rs.getInt    ("ChomageAnnee"));
+                result.put("ChomageMois"          , rs.getString ("ChomageMois"));
+                result.put("ChomageJour"          , rs.getInt    ("ChomageJour"));
+                result.put("MoisActualisation"    , rs.getString ("MoisActualisation"));
+                result.put("JoursParMois"         , rs.getInt    ("JoursParMois"));
+                result.put("Coefficient"          , rs.getDouble ("Coefficient"));
+                result.put("Montant"              , rs.getDouble ("Montant"));
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    /************************************************************ 
+                    RECUPERATION : REPERTOIRE + PDF
+    *************************************************************/
+
+    // Méthode générique pour récupèration des colonnes Répertoire des tableaux SQL
     public List<String> getDirPDF(String tableName, String columnName)
     {
         List<String> values = new ArrayList<>();
@@ -281,6 +423,36 @@ public class DBConnection
         } 
     }
 
+ 
+    // AJout des données dans le tableau "chomage"
+    public void setChomageData(Map<String, Object> chomageData)
+    {
+        String query = "INSERT INTO chomage " +
+                            "(ChomageAnnee, ChomageMois, ChomageJour, MoisActualisation, " +
+                                "JoursParMois, Coefficient, Montant, RepChomage, NameChomage) VALUES " +
+                                 "(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        
+        try (Connection conn = connect();
+                PreparedStatement pstmt = conn.prepareStatement(query))
+        {
+            pstmt.setInt       	(1, (Integer)       chomageData.get("ChomageAnnee"));
+            pstmt.setString    	(2, (String)        chomageData.get("ChomageMois"));
+            pstmt.setInt       	(3, (Integer)       chomageData.get("ChomageJour"));
+            pstmt.setString     (4, (String)        chomageData.get("MoisActualisation"));
+            pstmt.setDouble    	(5, (Integer)       chomageData.get("JoursParMois"));
+            pstmt.setDouble    	(6, (Double)        chomageData.get("Coefficient"));
+            pstmt.setDouble    	(7, (Double)        chomageData.get("Montant"));
+            pstmt.setString    	(8, (String)	       chomageData.get("RepChomage")); 
+            pstmt.setString    	(9, (String)	       chomageData.get("NameChomage")); 
+            pstmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException("Erreur lors de l'insertion des données de chomage", e);
+        } 
+    }
+
 
     /************************************************************ 
                                 DELETE
@@ -340,85 +512,7 @@ public class DBConnection
 
 
     /************************************************************ 
-                       REECRITURE DANS ONGLET 1
-    *************************************************************/
-
-    // Méthode permettant la lecture avec extraction de préfixe
-    public Map<String, Object> reWriteFacture(String nameFacture)
-    {
-        Map<String, Object> result = new HashMap<>();
-        
-        String query = "SELECT * FROM facture WHERE NameFacture = ? LIMIT 1";
-
-        try (Connection conn = connect();
-                PreparedStatement pstmt = conn.prepareStatement(query))
-        {
-            pstmt.setString    (1, nameFacture);
-
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                result.put("FactureAnnee"    , rs.getInt    ("FactureAnnee"));
-                result.put("FactureMois"     , rs.getString ("FactureMois"));
-                result.put("VersementAnnee"  , rs.getInt    ("VersementAnnee"));
-                result.put("VersementMois"   , rs.getString ("VersementMois"));
-                result.put("VersementJour"   , rs.getInt    ("VersementJour"));
-                result.put("Jours"           , rs.getInt    ("Jours"));
-                result.put("TJM"             , rs.getDouble ("TJM"));
-                result.put("TTC"             , rs.getDouble ("TTC"));
-                result.put("HT"              , rs.getDouble ("HT"));
-                result.put("TVA"             , rs.getDouble ("TVA"));
-                result.put("Taxes"           , rs.getDouble ("Taxes"));
-                result.put("Benefices"       , rs.getDouble ("Benefices"));
-            }
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-
-        return result;
-    }
-
-
-    /************************************************************ 
-                       REECRITURE DANS ONGLET 3
-    *************************************************************/
-
-    // Méthode permettant la lecture avec extraction de préfixe
-    public Map<String, Object> reWriteDeduction(String nameDeduction)
-    {
-        Map<String, Object> result = new HashMap<>();
-        
-        String query = "SELECT * FROM deduction WHERE NameDeduction = ? LIMIT 1";
-
-        try (Connection conn = connect();
-                PreparedStatement pstmt = conn.prepareStatement(query))
-        {
-            pstmt.setString    (1, nameDeduction);
-
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                result.put("DeductionAnnee"   , rs.getInt    ("DeductionAnnee"));
-                result.put("DeductionMois"    , rs.getString ("DeductionMois"));
-                result.put("DeductionJour"    , rs.getInt    ("DeductionJour"));
-                result.put("TTC"              , rs.getDouble ("TTC"));
-                result.put("HT"               , rs.getDouble ("HT"));
-                result.put("TVA"              , rs.getDouble ("TVA"));
-            }
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-
-        return result;
-    }
-
-
-    /************************************************************ 
-                       METHODES POUR REECRITURE
+                            AUTRES METHODES
     *************************************************************/
 
     // Méthode de controle du prefixe 
@@ -437,11 +531,13 @@ public class DBConnection
             if (item != null && !item.isEmpty()) 
             {
                 String cleanedName = cleanPrefix(item);
-                Map<String, Object> dataFacture = reWriteFacture(cleanedName);
-                Map<String, Object> dataDeduction = reWriteDeduction(cleanedName);
+                Map<String, Object> dataFacture   = reGetFacture(cleanedName);
+                Map<String, Object> dataDeduction = reGetDeduction(cleanedName);
+                Map<String, Object> dataChomage   = reGetChomage(cleanedName);
     
-                if (dataFacture != null && !dataFacture.isEmpty())   { updateUI.accept(dataFacture);   }
-                if (dataDeduction != null && !dataDeduction.isEmpty())   { updateUI.accept(dataDeduction);   }
+                if (dataFacture != null && !dataFacture.isEmpty())       { updateUI.accept(dataFacture);   }
+                if (dataDeduction != null && !dataDeduction.isEmpty())   { updateUI.accept(dataDeduction); }
+                if (dataChomage != null && !dataChomage.isEmpty())       { updateUI.accept(dataChomage);   }
             }
         });
     }

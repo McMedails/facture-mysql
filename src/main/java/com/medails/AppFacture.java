@@ -27,6 +27,7 @@ public class AppFacture
                 Treatment1 treatment1 = new Treatment1(dbConnection, display);  
                 Treatment2 treatment2 = new Treatment2(dbConnection, display, graphic); 
                 Treatment3 treatment3 = new Treatment3(dbConnection, display, graphic, treatment1, treatment2); 
+                Treatment4 treatment4 = new Treatment4(dbConnection, display, graphic, treatment1, treatment2); 
             }
         });
     }

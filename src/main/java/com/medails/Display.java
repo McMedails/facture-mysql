@@ -39,6 +39,7 @@ public class Display
         pan1Position();
         pan2Position();
         pan3Position();
+        pan4Position();
     }
 
     /************************************************************ 
@@ -51,12 +52,15 @@ public class Display
     public JPanel pan1;
     public JPanel pan2;
     public JPanel pan3;
+    public JPanel pan4;
     public JScrollPane scroll1;
     public JScrollPane scroll2;
     public JScrollPane scroll3;
+    public JScrollPane scroll4;
     public JTabbedPane tabMain;
     public JTabbedPane tabGraph;    
     public JTabbedPane tabDeduction;    
+    public JTabbedPane tabChomage;    
     public GridBagConstraints gbc;
 
     /*********** Onglet 1 ***************/
@@ -88,7 +92,7 @@ public class Display
     public final int MINRANGE_YEARMONTHPAN2  = 10000;     public final int MAXRANGE_YEARMONTHPAN2  = 20000; 
     public JSlider               sliDecadePan2;          { sliDecadePan2        = new JSlider           (JSlider.HORIZONTAL, MINRANGE_DECADEPAN2, MAXRANGE_DECADEPAN2, MINRANGE_DECADEPAN2);}   
     public JSlider               sliYearMonthPan2;       { sliYearMonthPan2     = new JSlider           (JSlider.HORIZONTAL, MINRANGE_YEARMONTHPAN2, MAXRANGE_YEARMONTHPAN2, MINRANGE_YEARMONTHPAN2);}  
-    public JToggleButton         togTotal;               { togTotal             = new JToggleButton     ();}                                // A1   - Déduction TVA 
+    public JToggleButton         togTotal;               { togTotal             = new JToggleButton     ();}                                // A1 - Déduction TVA 
     public JComboBox<String>     boxYearsTotal;          { boxYearsTotal        = new JComboBox<String> ();}                                // A2 - Années          
     public JCheckBox             cckTTCPan2;             { cckTTCPan2           = new JCheckBox         ("", true);}    		// B1 - TTC
     public JCheckBox             cckTVAPan2;             { cckTVAPan2           = new JCheckBox         ("", true);}    		// B2 - TVA
@@ -101,7 +105,7 @@ public class Display
     public final int MINRANGE_YEARMONTHPAN3  = 5000;      public final int MAXRANGE_YEARMONTHPAN3  = 10000; 
     public JSlider               sliDecadePan3;          { sliDecadePan3        = new JSlider           (JSlider.HORIZONTAL, MINRANGE_DECADEPAN3, MAXRANGE_DECADEPAN3, MINRANGE_DECADEPAN3);}   
     public JSlider               sliYearMonthPan3;       { sliYearMonthPan3     = new JSlider           (JSlider.HORIZONTAL, MINRANGE_YEARMONTHPAN3, MAXRANGE_YEARMONTHPAN3, MINRANGE_YEARMONTHPAN3);}                    
-    public JComboBox<String>     boxYearsDeduction;      { boxYearsDeduction    = new JComboBox<String> ();}                                // A2 - Déduction
+    public JComboBox<String>     boxYearsDeduction;      { boxYearsDeduction    = new JComboBox<String> ();}                                // A1 - Déduction
     public JDateChooser          dateDeduction;          { dateDeduction        = new JDateChooser      ();}                                // B1 - Date de paiement 
     public JTextField            txtTTCPan3;             { txtTTCPan3           = new JTextField        ();}                                // C1 - Résultat TTC
     public JTextField            txtHTPan3;              { txtHTPan3            = new JTextField        ();}                                // C2 - Résultat HT 
@@ -114,8 +118,29 @@ public class Display
     public JButton               butSaveDeduction;       { butSaveDeduction     = new JButton           ("Enregistrer");}              // G2 - Enregistrer
     public JButton               butReset3;              { butReset3            = new JButton           ("RAZ");}                      // G3 - RAZ
 
+    /*********** Onglet 4 ***************/
+    public final int MINRANGE_DECADEPAN4     = 18000;     public final int MAXRANGE_DECADEPAN4     = 30000;
+    public final int MINRANGE_YEARMONTHPAN4  = 2000;      public final int MAXRANGE_YEARMONTHPAN4  = 5000; 
+    public JSlider               sliDecadePan4;          { sliDecadePan4        = new JSlider           (JSlider.HORIZONTAL, MINRANGE_DECADEPAN4, MAXRANGE_DECADEPAN4, MINRANGE_DECADEPAN4);}   
+    public JSlider               sliYearMonthPan4;       { sliYearMonthPan4     = new JSlider           (JSlider.HORIZONTAL, MINRANGE_YEARMONTHPAN4, MAXRANGE_YEARMONTHPAN4, MINRANGE_YEARMONTHPAN4);}                    
+    public JComboBox<String>     boxYearsChomage;        { boxYearsChomage      = new JComboBox<String> ();}                                  // A1 - Chomage
+    public JDateChooser          dateChomage;            { dateChomage          = new JDateChooser      ();}                                  // B1 - Date de versement 
+    public JComboBox<String>     boxMonthsChomage;       { boxMonthsChomage     = new JComboBox<String> ();}                                  // B2 - Mois
+    public JTextField            txtDayChomage;          { txtDayChomage        = new JTextField        ();}                                  // C1 - Nombre de jours dans le mois
+    public JTextField            txtQChomage;            { txtQChomage          = new JTextField        ();}                                  // C2 - Quotient de l'ARE 
+    public JTextField            txtAREChomage;          { txtAREChomage        = new JTextField        ();}                                  // C3 - Montant de l'ARE 
+    public JButton               butOpenChomage;         { butOpenChomage       = new JButton           ("Ouvrir");}                     // D1 - Ouvrir Chomage
+    public JButton               butSearchChomage;       { butSearchChomage     = new JButton           ("Parcourir");}                  // D2 - Parcourir Chomage
+    public JComboBox<String>     boxRepChomage;          { boxRepChomage        = new JComboBox<String> ();}                                  // E1 - Barre de recherche Chomage (Réperoitre)
+    public JComboBox<String>     boxPDFChomage;          { boxPDFChomage        = new JComboBox<String> ();}                                  // F1 - Barre de recherche Chomage (Nom du PDF)
+    public JButton				 butDeleteChomage;       { butDeleteChomage     = new JButton		    ("Supprimer");}			      // G1 - Supprimer
+    public JButton               butSaveChomage;         { butSaveChomage       = new JButton           ("Enregistrer");}                // G2 - Enregistrer
+    public JButton               butReset4;              { butReset4            = new JButton           ("RAZ");}                        // G3 - RAZ
+
     // Année et mois
     private String years[] = {"", "2024", "2025", "2026", "2027", "2028"};
+    private String yearsChomage[] = {"", "2019", "2020", "2021", "2022", "2023", "2024", "2025", "2026", "2027", "2028"}; 
+
     private String months[] = {"", "Janvier", "Février", "Mars", "Avril", 
                                       "Mai", "Juin", "Juillet", "Août", "Septembre", 
                                       "Octobre", "Novembre", "Décembre"};
@@ -132,6 +157,7 @@ public class Display
         pan1 = new JPanel();
         pan2 = new JPanel();
         pan3 = new JPanel();
+        pan4 = new JPanel();
 
         // Configuration Fenetre/Panel
         fen.setTitle("Gestionnaie de facture");
@@ -142,25 +168,32 @@ public class Display
         pan1.setBackground(Color.LIGHT_GRAY);
         pan2.setBackground(Color.LIGHT_GRAY);
         pan3.setBackground(Color.LIGHT_GRAY);
+        pan4.setBackground(Color.LIGHT_GRAY);
         pan1.setLayout(new GridBagLayout());   
         pan2.setLayout(new GridBagLayout());   
         pan3.setLayout(new GridBagLayout());   
+        pan4.setLayout(new GridBagLayout());   
 
         // Ajout du scroll aux panels
         scroll1 = new JScrollPane(pan1);
         scroll2 = new JScrollPane(pan2);
         scroll3 = new JScrollPane(pan3);
+        scroll4 = new JScrollPane(pan4);
         scroll1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scroll2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scroll3.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scroll4.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         
         // Onglets - utilisation les JScrollPane au lieu des JPanel
         tabMain = new JTabbedPane();
         tabMain.add("Enregistrement", scroll1);
-        tabMain.add("Graphique", scroll2);
+        tabMain.add("Facture", scroll2);
         tabMain.add("Déducttion", scroll3);
+        tabMain.add("Chomage", scroll4);
         tabGraph = new JTabbedPane();
         tabDeduction = new JTabbedPane();
+        tabChomage = new JTabbedPane();
+
         // Ajout des onglets dans Fenetre
         fen.add(tabMain, BorderLayout.CENTER);
 
@@ -483,16 +516,105 @@ public class Display
     
         // /************************ Boutons ************************/
         // G1 - Supprimer
-        gbc.insets = new Insets(0, 0, 10, 90);
+        gbc.insets = new Insets(0, 0, 10, 110);
         addComposant(pan3, butDeleteDeduction, 0, 22, 2);
         
         // G2 - Enregistrer
-        gbc.insets = new Insets(0, 0, 10, 75);
+        gbc.insets = new Insets(0, 0, 10, 55);
         addComposant(pan3, butSaveDeduction, 1, 22, 2);
 
         // G3 - RAZ
         gbc.insets = new Insets(0, 0, 10, 0);
         addComposant(pan3, butReset3, 2, 22, 2);
+    }
+
+
+    /*********************************************************** 
+                              PANEL 4 
+    ***********************************************************/
+
+    public void pan4Position()
+    {
+        /********************** Chomage ***********************/
+    
+        // XX - Slide
+        gbc.insets = new Insets(10, 0, 10, 0);
+        JLabel labSliDecadePan4 = new JLabel("Décénie : ");
+        JLabel labSliYearMonthPan4 = new JLabel("Annuel/Mensuel : ");
+        addComposant(pan4, labSliDecadePan4, 0, 0, 1);
+        addComposant(pan4, labSliYearMonthPan4, 0, 1, 1);
+        addComposant(pan4, sliDecadePan4, 1, 0, 3); 
+        addComposant(pan4, sliYearMonthPan4, 1, 1, 3); 
+
+        // A1 - Années
+        gbc.insets = new Insets(400, 30, 0, 0);
+        boxYearsChomage = createJComboBox(60, 18, yearsChomage);
+        addComposant(pan4, boxYearsChomage, 2, 4, 1); 
+
+        // B1 - Date de versement
+        gbc.insets = new Insets(0, 0, 10, 0);
+        JLabel labDateChomage = new JLabel("Date versement");
+        dateChomage.setPreferredSize(new Dimension(100, 18));
+        addComposant(pan4, labDateChomage, 0, 6, 1);
+        addComposant(pan4, dateChomage, 0, 8, 1);
+
+        // B2 - Mois
+        JLabel labMonthsChomage = new JLabel("Mois actualisation");
+        boxMonthsChomage = createJComboBox(100, 18, months);
+        addComposant(pan4, labMonthsChomage, 1, 6, 1);
+        addComposant(pan4, boxMonthsChomage, 1, 8, 1);
+
+        // C1 - Nombre de jours dans le mois
+        gbc.insets = new Insets(0, 0, 10, 0);
+        JLabel labDaysPan4 = new JLabel("Jours");
+        txtDayChomage = createTextField(60, 18); 
+        addComposant(pan4, labDaysPan4, 0, 10, 1);
+        addComposant(pan4, txtDayChomage, 0, 12, 1);
+
+        // C2 - Quotient de l'ARE 
+        JLabel labQPan4 = new JLabel("%");
+        txtQChomage = createTextField(60, 18); 
+        addComposant(pan4, labQPan4, 1, 10, 1);
+        addComposant(pan4, txtQChomage, 1, 12, 1);
+
+        // C3 - Montant de l'ARE 
+        JLabel labAREPan4 = new JLabel("Montant");
+        txtAREChomage = createTextField(60, 18); 
+        addComposant(pan4, labAREPan4, 2, 10, 1);
+        addComposant(pan4, txtAREChomage, 2, 12, 1);
+
+        JLabel labChomage = new JLabel("<html><u>Chomage</u></html>");
+        labChomage.setFont(styleFont2);
+        addComposant(pan4, labChomage, 0, 14, 1);
+
+        // D1 - Ouvrir Chomage
+        gbc.insets = new Insets(0, 65, 10, 10);
+        addComposant(pan4, butOpenChomage, 1, 16, 1);
+
+        // D2 - Parcourir Chomage
+        gbc.insets = new Insets(0, 0, 10, 0);
+        addComposant(pan4, butSearchChomage, 2, 16, 1);
+
+        // E1 - Barre de recherche Chomage (Réperoitre)
+        boxRepChomage = createJComboBox(330, 18);
+        addComposant(pan4, boxRepChomage, 0, 18, 3);
+
+        // F1 - Barre de recherche Chomage (Nom du PDF)
+        boxPDFChomage = createJComboBox(330, 18);
+        addComposant(pan4, boxPDFChomage, 0, 20, 3);
+    
+        // /************************ Boutons ************************/
+        // G1 - Supprimer
+        gbc.insets = new Insets(0, 0, 10, 110);
+        addComposant(pan4, butDeleteChomage, 0, 22, 2);
+        
+        // G2 - Enregistrer
+        gbc.insets = new Insets(0, 0, 10, 55);
+        addComposant(pan4, butSaveChomage, 1, 22, 2);
+
+        // G3 - RAZ
+        gbc.insets = new Insets(0, 0, 10, 0);
+        addComposant(pan4, butReset4, 2, 22, 2);
     }
 }
                         
