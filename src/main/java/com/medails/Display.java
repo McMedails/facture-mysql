@@ -64,17 +64,17 @@ public class Display
     public GridBagConstraints gbc;
 
     /*********** Onglet 1 ***************/
-    public JComboBox<String>     boxYears;               { boxYears             = new JComboBox<String> ();}                                // A1 - Années
+    public JComboBox<String>     boxYears;               { boxYears             = new JComboBox<String> ();}                                // A1 - Année
     public JComboBox<String>     boxMonths;              { boxMonths            = new JComboBox<String> ();}                                // A2 - Mois
     public JDateChooser          datePay;                { datePay              = new JDateChooser      ();}                                // A3 - Date de paiement
     public JTextField            txtDays;                { txtDays              = new JTextField        ();}                                // B1 - Jours travaillés
     public JTextField            txtTJM;                 { txtTJM               = new JTextField        ();}                                // B2 - TJM
     public JButton               butTVA;                 { butTVA               = new JButton           ("Calculer");}                 // B3 - Calcule TVA (BP)
-    public JTextField            txtTTC;                 { txtTTC               = new JTextField        ();}                                // C1 - Résultat TTC
-    public JTextField            txtHT;                  { txtHT                = new JTextField        ();}                                // C2 - Résultat HT
-    public JTextField            txtTVA;                 { txtTVA               = new JTextField        ();}                                // C3 - Différence TVA  
+    public JTextField            txtTTC;                 { txtTTC               = new JTextField        ();}                                // C1 - TTC
+    public JTextField            txtHT;                  { txtHT                = new JTextField        ();}                                // C2 - HT
+    public JTextField            txtTVA;                 { txtTVA               = new JTextField        ();}                                // C3 - TVA  
     public JTextField            txtTaxe;                { txtTaxe              = new JTextField        ();}                                // D1 - Taxe URSSAF
-    public JTextField            txtBenefit;             { txtBenefit           = new JTextField        ();}                                // D2 - Différence Taxe
+    public JTextField            txtBenefit;             { txtBenefit           = new JTextField        ();}                                // D2 - Bénéfices
     public JButton               butOpenFacture;         { butOpenFacture       = new JButton           ("Ouvrir");}                   // E1 - Ouvrir facture
     public JButton               butSearchFacture;       { butSearchFacture     = new JButton           ("Parcourir");}                // E2 - Parcourir facture
     public JComboBox<String>     boxRep1;                { boxRep1              = new JComboBox<String> ();}                                // F1 - Barre de recherche Facture (Réperoitre)
@@ -93,7 +93,7 @@ public class Display
     public JSlider               sliDecadePan2;          { sliDecadePan2        = new JSlider           (JSlider.HORIZONTAL, MINRANGE_DECADEPAN2, MAXRANGE_DECADEPAN2, MINRANGE_DECADEPAN2);}   
     public JSlider               sliYearMonthPan2;       { sliYearMonthPan2     = new JSlider           (JSlider.HORIZONTAL, MINRANGE_YEARMONTHPAN2, MAXRANGE_YEARMONTHPAN2, MINRANGE_YEARMONTHPAN2);}  
     public JToggleButton         togTotal;               { togTotal             = new JToggleButton     ();}                                // A1 - Déduction TVA 
-    public JComboBox<String>     boxYearsTotal;          { boxYearsTotal        = new JComboBox<String> ();}                                // A2 - Années          
+    public JComboBox<String>     boxYearsTotal;          { boxYearsTotal        = new JComboBox<String> ();}                                // A2 - Choix Année          
     public JCheckBox             cckTTCPan2;             { cckTTCPan2           = new JCheckBox         ("", true);}    		// B1 - TTC
     public JCheckBox             cckTVAPan2;             { cckTVAPan2           = new JCheckBox         ("", true);}    		// B2 - TVA
     public JCheckBox             cckHTPan2;              { cckHTPan2            = new JCheckBox         ("", true);}    		// B3 - HT
@@ -105,11 +105,11 @@ public class Display
     public final int MINRANGE_YEARMONTHPAN3  = 5000;      public final int MAXRANGE_YEARMONTHPAN3  = 10000; 
     public JSlider               sliDecadePan3;          { sliDecadePan3        = new JSlider           (JSlider.HORIZONTAL, MINRANGE_DECADEPAN3, MAXRANGE_DECADEPAN3, MINRANGE_DECADEPAN3);}   
     public JSlider               sliYearMonthPan3;       { sliYearMonthPan3     = new JSlider           (JSlider.HORIZONTAL, MINRANGE_YEARMONTHPAN3, MAXRANGE_YEARMONTHPAN3, MINRANGE_YEARMONTHPAN3);}                    
-    public JComboBox<String>     boxYearsDeduction;      { boxYearsDeduction    = new JComboBox<String> ();}                                // A1 - Déduction
-    public JDateChooser          dateDeduction;          { dateDeduction        = new JDateChooser      ();}                                // B1 - Date de paiement 
-    public JTextField            txtTTCPan3;             { txtTTCPan3           = new JTextField        ();}                                // C1 - Résultat TTC
-    public JTextField            txtHTPan3;              { txtHTPan3            = new JTextField        ();}                                // C2 - Résultat HT 
-    public JTextField            txtTVAPan3;             { txtTVAPan3           = new JTextField        ();}                                // C3 - Résultat TVA
+    public JComboBox<String>     boxYearsDeduction;      { boxYearsDeduction    = new JComboBox<String> ();}                                // A1 - Choix Année
+    public JDateChooser          dateDeduction;          { dateDeduction        = new JDateChooser      ();}                                // B1 - Date d'achat 
+    public JTextField            txtTTCPan3;             { txtTTCPan3           = new JTextField        ();}                                // C1 - TTC
+    public JTextField            txtHTPan3;              { txtHTPan3            = new JTextField        ();}                                // C2 - HT 
+    public JTextField            txtTVAPan3;             { txtTVAPan3           = new JTextField        ();}                                // C3 - TVA
     public JButton               butOpenDeduction;       { butOpenDeduction     = new JButton           ("Ouvrir");}                   // D1 - Ouvrir Déduction
     public JButton               butSearchDeduction;     { butSearchDeduction   = new JButton           ("Parcourir");}                // D2 - Parcourir Déduction
     public JComboBox<String>     boxRepDeduction;        { boxRepDeduction      = new JComboBox<String> ();}                                // E1 - Barre de recherche Déduction (Réperoitre)
@@ -123,9 +123,9 @@ public class Display
     public final int MINRANGE_YEARMONTHPAN4  = 2000;      public final int MAXRANGE_YEARMONTHPAN4  = 5000; 
     public JSlider               sliDecadePan4;          { sliDecadePan4        = new JSlider           (JSlider.HORIZONTAL, MINRANGE_DECADEPAN4, MAXRANGE_DECADEPAN4, MINRANGE_DECADEPAN4);}   
     public JSlider               sliYearMonthPan4;       { sliYearMonthPan4     = new JSlider           (JSlider.HORIZONTAL, MINRANGE_YEARMONTHPAN4, MAXRANGE_YEARMONTHPAN4, MINRANGE_YEARMONTHPAN4);}                    
-    public JComboBox<String>     boxYearsChomage;        { boxYearsChomage      = new JComboBox<String> ();}                                  // A1 - Chomage
-    public JDateChooser          dateChomage;            { dateChomage          = new JDateChooser      ();}                                  // B1 - Date de versement 
-    public JComboBox<String>     boxMonthsChomage;       { boxMonthsChomage     = new JComboBox<String> ();}                                  // B2 - Mois
+    public JComboBox<String>     boxYearsChomage;        { boxYearsChomage      = new JComboBox<String> ();}                                  // A1 - Choix Année
+    public JDateChooser          dateChomage;            { dateChomage          = new JDateChooser      ();}                                  // B1 - Date versement 
+    public JComboBox<String>     boxMonthsChomage;       { boxMonthsChomage     = new JComboBox<String> ();}                                  // B2 - Mois actualisation
     public JTextField            txtDayChomage;          { txtDayChomage        = new JTextField        ();}                                  // C1 - Nombre de jours dans le mois
     public JTextField            txtQChomage;            { txtQChomage          = new JTextField        ();}                                  // C2 - Quotient de l'ARE 
     public JTextField            txtAREChomage;          { txtAREChomage        = new JTextField        ();}                                  // C3 - Montant de l'ARE 
@@ -289,13 +289,13 @@ public class Display
         // B3 - Calcule TVA (BP)
         addComposant(pan1, butTVA, 2, 8, 1);
 
-        // C1 - Résultat TTC
+        // C1 - TTC
         JLabel labTTC = new JLabel("TTC");
         txtTTC = createTextField(60, 18);
         addComposant(pan1, labTTC, 0, 10, 1);
         addComposant(pan1, txtTTC, 0, 12, 1);
 
-        // C2 - Résultat HT
+        // C2 - HT
         JLabel labHT = new JLabel("HT");
         txtHT = createTextField(60, 18);
         addComposant(pan1, labHT, 1, 10, 1);
@@ -405,7 +405,7 @@ public class Display
         gbc.insets = new Insets(400, 85, 0, 0);
         addComposant(pan2, togTotal, 2, 2, 2);  
 
-        // A2 - Années
+        // A2 - Choix Année
         gbc.insets = new Insets(400, 30, 0, 0);
         boxYearsTotal = createJComboBox(60, 18, years);
         addComposant(pan2, boxYearsTotal, 4, 2, 2);
@@ -463,12 +463,12 @@ public class Display
         addComposant(pan3, sliDecadePan3, 1, 0, 3); 
         addComposant(pan3, sliYearMonthPan3, 1, 1, 3); 
 
-        // A1 - Années
+        // A1 - Choix Année
         gbc.insets = new Insets(400, 30, 0, 0);
         boxYearsDeduction = createJComboBox(60, 18, years);
         addComposant(pan3, boxYearsDeduction, 2, 4, 1); 
 
-        // B1 - Date de paiement
+        // B1 - Date d'achat
         gbc.insets = new Insets(0, 0, 10, 0);
         JLabel labDateDeduction = new JLabel("Date d'achat");
         dateDeduction.setPreferredSize(new Dimension(100, 18));
@@ -546,19 +546,19 @@ public class Display
         addComposant(pan4, sliDecadePan4, 1, 0, 3); 
         addComposant(pan4, sliYearMonthPan4, 1, 1, 3); 
 
-        // A1 - Années
+        // A1 - Choix Année
         gbc.insets = new Insets(400, 30, 0, 0);
         boxYearsChomage = createJComboBox(60, 18, yearsChomage);
         addComposant(pan4, boxYearsChomage, 2, 4, 1); 
 
-        // B1 - Date de versement
+        // B1 - Date versement
         gbc.insets = new Insets(0, 0, 10, 0);
         JLabel labDateChomage = new JLabel("Date versement");
         dateChomage.setPreferredSize(new Dimension(100, 18));
         addComposant(pan4, labDateChomage, 0, 6, 1);
         addComposant(pan4, dateChomage, 0, 8, 1);
 
-        // B2 - Mois
+        // B2 - Mois actualisation
         JLabel labMonthsChomage = new JLabel("Mois actualisation");
         boxMonthsChomage = createJComboBox(100, 18, months);
         addComposant(pan4, labMonthsChomage, 1, 6, 1);
